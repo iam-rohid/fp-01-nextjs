@@ -1,3 +1,9 @@
+import AppBar from "./AppBar";
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <>
+      <AppBar title="Home" />
+    </>
+  );
 }

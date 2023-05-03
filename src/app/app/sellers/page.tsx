@@ -1,3 +1,9 @@
+import AppBar from "../AppBar";
+
 export default function Sellers() {
-  return <div>Sellers</div>;
+  return (
+    <>
+      <AppBar title="Sellers" />
+    </>
+  );
 }

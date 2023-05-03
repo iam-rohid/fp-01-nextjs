@@ -105,7 +105,7 @@ const UserDropdownContent = ({
       <DropdownMenu.Item asChild>
         <Link
           href={`${APP_ROOT_ROUTE}/account`}
-          className="flex w-full rounded-md px-4 py-2 outline-none focus:bg-slate-100 focus:text-slate-900"
+          className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
             <MdPerson />
@@ -116,7 +116,7 @@ const UserDropdownContent = ({
       <DropdownMenu.Item asChild>
         <Link
           href={`${APP_ROOT_ROUTE}/subscription`}
-          className="flex w-full rounded-md px-4 py-2 outline-none focus:bg-slate-100 focus:text-slate-900"
+          className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
             <MdAutoAwesome />
@@ -127,7 +127,7 @@ const UserDropdownContent = ({
       <DropdownMenu.Item asChild>
         <Link
           href={`${APP_ROOT_ROUTE}/billing`}
-          className="flex w-full rounded-md px-4 py-2 outline-none focus:bg-slate-100 focus:text-slate-900"
+          className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
             <MdPayments />
@@ -185,9 +185,9 @@ const SidebarFooter = () => {
         </div>
         <div className="flex-1 overflow-hidden text-left">
           <p className="truncate font-medium text-slate-900">{`${data?.first_name} ${data?.last_name}`}</p>
-          <p className="truncate text-xs">{data?.email}</p>
+          <p className="truncate text-xs text-slate-600">{data?.email}</p>
         </div>
-        <span className="text-2xl">
+        <span className="text-2xl text-slate-600">
           <MdMoreHoriz />
         </span>
       </DropdownMenu.Trigger>
@@ -214,7 +214,7 @@ function ListItemLink(props: ListItemLinkProps) {
         "flex w-full items-center gap-2.5 rounded-lg px-4 py-2.5",
         isActive
           ? "bg-primary-500/10 text-primary-500"
-          : "hover:bg-slate-100 hover:text-slate-900"
+          : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
       )}
     >
       {icon ? <span className="text-2xl">{icon}</span> : null}

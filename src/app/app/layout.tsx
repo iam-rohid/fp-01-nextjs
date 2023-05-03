@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-slate-100">
+    <div className="relative h-screen w-screen overflow-hidden bg-slate-100 text-slate-900">
       <Sidebar />
 
       <div className="absolute bottom-0 left-0 right-0 top-14 lg:left-64 lg:top-0">

@@ -12,11 +12,11 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 
 export type MapProps = {
-  data: SellerListItem[];
+  sellers: SellerListItem[];
   onItemClick?: (value: SellerListItem) => void;
 };
 
-export default function Map({ data, onItemClick }: MapProps) {
+export default function Map({ sellers, onItemClick }: MapProps) {
   const mapDivRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
 
@@ -42,8 +42,8 @@ export default function Map({ data, onItemClick }: MapProps) {
 
   useEffect(() => {
     if (!mapRef.current) return;
-    if (!data.length) return;
-    const sortedData = data.sort((a, b) =>
+    if (!sellers.length) return;
+    const sortedData = sellers.sort((a, b) =>
       a.estimate_sales > b.estimate_sales ? 1 : -1
     );
 
@@ -51,7 +51,7 @@ export default function Map({ data, onItemClick }: MapProps) {
     sortedData.forEach((seller) => {
       sum += seller.estimate_sales;
     });
-    const avg = sum / data.length;
+    const avg = sum / sellers.length;
 
     const markers = L.markerClusterGroup({
       animate: true,
@@ -108,7 +108,7 @@ export default function Map({ data, onItemClick }: MapProps) {
     return () => {
       mapRef.current?.removeLayer(markers);
     };
-  }, [mapRef, data, onItemClick]);
+  }, [mapRef, sellers, onItemClick]);
 
   return <div ref={mapDivRef} className="absolute inset-0 z-0" />;
 }
