@@ -1,10 +1,7 @@
 import supabase from "@/libs/supabase";
-import { SellerListItem } from "@/types";
 
-export const fetchSellerList = async (): Promise<SellerListItem[]> => {
-  const { data, error } = await supabase
-    .from("sellers")
-    .select("id,name,estimate_sales,geo_location");
+export const fetchSellerList = async () => {
+  const { data, error } = await supabase.from("sellers").select("*");
   if (error) {
     throw error;
   }

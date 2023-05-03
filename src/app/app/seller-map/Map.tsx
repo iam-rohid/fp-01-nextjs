@@ -1,6 +1,3 @@
-"use client";
-
-import { SellerListItem } from "@/types";
 import L from "leaflet";
 import "leaflet.markercluster";
 import { useEffect, useRef } from "react";
@@ -10,10 +7,19 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
+import { SellersResponse } from "./page";
+
+export type Seller = {
+  id: number;
+  name: string;
+  estimate_sales: number;
+  latitude: number;
+  longitude: number;
+};
 
 export type MapProps = {
-  sellers: SellerListItem[];
-  onItemClick?: (value: SellerListItem) => void;
+  sellers: Seller[];
+  onItemClick?: (seller: Seller) => void;
 };
 
 export default function Map({ sellers, onItemClick }: MapProps) {
@@ -42,14 +48,15 @@ export default function Map({ sellers, onItemClick }: MapProps) {
 
   useEffect(() => {
     if (!mapRef.current) return;
-    if (!sellers.length) return;
+    if (!sellers?.length) return;
+
     const sortedData = sellers.sort((a, b) =>
-      a.estimate_sales > b.estimate_sales ? 1 : -1
+      (a.estimate_sales || 0) > (b.estimate_sales || 0) ? 1 : -1
     );
 
     let sum = 0;
     sortedData.forEach((seller) => {
-      sum += seller.estimate_sales;
+      sum += seller.estimate_sales || 0;
     });
     const avg = sum / sellers.length;
 
@@ -74,11 +81,11 @@ export default function Map({ sellers, onItemClick }: MapProps) {
       },
     });
 
-    sortedData.forEach((seller: SellerListItem) => {
-      const point = L.latLng(seller.geo_location.lat, seller.geo_location.lng);
+    sortedData.forEach((seller) => {
+      const point = L.latLng(seller.latitude || 0, seller.longitude || 0);
       const iconSize = Math.max(
         10,
-        Math.min(60, Math.round((seller.estimate_sales * 40) / avg))
+        Math.min(60, Math.round(((seller.estimate_sales || 0) * 40) / avg))
       );
       const marker = L.marker(point, {
         icon: L.divIcon({
@@ -91,7 +98,7 @@ export default function Map({ sellers, onItemClick }: MapProps) {
         ${seller.name}
         </p>
         <p class='seller-marker-popup-sales'>
-        $${seller.estimate_sales.toLocaleString()}
+        $${(seller.estimate_sales || 0).toLocaleString()}
         </p>
       </div>`;
       marker.bindPopup(popupContent, {

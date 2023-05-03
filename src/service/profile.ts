@@ -1,15 +1,10 @@
 import supabase from "@/libs/supabase";
-import { IProfile } from "@/types/profile";
 
-export const fetchProfileAsync = async (
-  profileId?: string
-): Promise<IProfile> => {
-  if (!profileId) throw "profileId is required";
-
+export const fetchProfileAsync = async (id: string) => {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id,created_at,first_name,last_name,email")
-    .eq("id", profileId)
+    .select("*")
+    .eq("id", id)
     .single();
   if (error) {
     throw error;

@@ -1,5 +1,4 @@
 import supabase from "@/libs/supabase";
-import { Seller } from "@/types/seller";
 import { useQuery } from "@tanstack/react-query";
 import CircularProgress from "./CircularProgress";
 import { ReactNode } from "react";
@@ -8,10 +7,10 @@ import clsx from "clsx";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
 
-const fetchSeller = async (sellerId: number): Promise<Seller> => {
+const fetchSeller = async (sellerId: number) => {
   const { data, error } = await supabase
     .from("sellers")
-    .select("id,created_at,updated_at,name,estimate_sales,geo_location")
+    .select("*")
     .eq("id", sellerId)
     .single();
   if (error) {
@@ -77,13 +76,15 @@ export default function SellerDetails({ sellerId }: { sellerId: number }) {
               <DetailsItem
                 title="Last Updated"
                 value={format(
-                  new Date(seller.updated_at || seller.created_at),
+                  new Date(
+                    seller.updated_at || seller.created_at || new Date()
+                  ),
                   "MMM dd, yyy"
                 )}
               />
               <DetailsItem
                 title="Monthly Revenue"
-                value={`$${seller.estimate_sales.toLocaleString()}`}
+                value={`$${(seller.estimate_sales || 0).toLocaleString()}`}
               />
               <DetailsItem title="Percent FBA" value={`99.86%`} />
               <DetailsItem title="Full Brand Coverage" value={`17`} />

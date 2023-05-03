@@ -2,31 +2,43 @@
 
 import {
   MdPerson,
-  MdLogout,
   MdMap,
   MdHome,
-  MdPayments,
-  MdAutoAwesome,
   MdMoreHoriz,
   MdStore,
+  MdLogout,
+  MdPayments,
+  MdAutoAwesome,
   MdMenu,
 } from "react-icons/md";
-import { useQuery } from "@tanstack/react-query";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import clsx from "clsx";
-import { Fragment, ReactNode, useState } from "react";
+import {
+  Fragment,
+  ReactNode,
+  RefAttributes,
+  forwardRef,
+  useCallback,
+  useState,
+} from "react";
 import Link from "next/link";
-import { fetchProfileAsync } from "@/service/profile";
-import { useAuth } from "@/hooks/useAuth";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { APP_ROOT_ROUTE } from "@/utils/constant";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProfileAsync } from "@/service/profile";
+import supabase from "@/libs/supabase";
+import { User } from "@supabase/supabase-js";
 
-export default function SideBar() {
+export default function SideBar({ user }: { user: User }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <Fragment>
-      <Header sidebarOpen={sidebarOpen} onSidebarOpenChange={setSidebarOpen} />
+      <Header
+        user={user}
+        sidebarOpen={sidebarOpen}
+        onSidebarOpenChange={setSidebarOpen}
+      />
       <Overaly sidebarOpen={sidebarOpen} onSidebarOpenChange={setSidebarOpen} />
       <aside
         className={clsx(
@@ -36,7 +48,7 @@ export default function SideBar() {
       >
         <SidebarHeader />
         <SidebarList />
-        <SidebarFooter />
+        <SidebarFooter user={user} />
       </aside>
     </Fragment>
   );
@@ -76,31 +88,30 @@ const SidebarList = () => {
   );
 };
 
-const SidebarHeader = () => (
-  <header className="flex items-center p-4">
-    <Link
-      href={APP_ROOT_ROUTE}
-      className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-500 text-xl font-bold text-white"
-    >
-      S
-    </Link>
-  </header>
-);
+type UserDropdownContentProps = DropdownMenu.DropdownMenuContentProps &
+  RefAttributes<HTMLDivElement>;
 
-const UserDropdownContent = ({
-  align,
-  side,
-}: {
-  align?: "center" | "start" | "end";
-  side?: "top" | "right" | "bottom" | "left";
-}) => {
-  const { signOut } = useAuth();
+const UserDropdownContent = forwardRef<
+  HTMLDivElement,
+  UserDropdownContentProps
+>((props, ref) => {
+  const rotuer = useRouter();
+
+  const handleSignOut = useCallback(async () => {
+    try {
+      await supabase.auth.signOut();
+      console.log("Sign out success");
+      rotuer.replace("/signin");
+    } catch (e) {
+      console.error("Failed to sign out", e);
+    }
+  }, [rotuer]);
 
   return (
     <DropdownMenu.Content
-      align={align}
-      side={side}
       className="z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+      {...props}
+      ref={ref}
     >
       <DropdownMenu.Item asChild>
         <Link
@@ -138,7 +149,7 @@ const UserDropdownContent = ({
       <DropdownMenu.Separator className="my-2 h-px bg-slate-200" />
       <DropdownMenu.Item asChild>
         <button
-          onClick={signOut}
+          onClick={handleSignOut}
           className="flex w-full items-center rounded-md px-4 py-2 text-red-400 outline-none focus:bg-red-500/5 focus:text-red-500"
         >
           <span className="mr-4 text-2xl">
@@ -149,15 +160,28 @@ const UserDropdownContent = ({
       </DropdownMenu.Item>
     </DropdownMenu.Content>
   );
-};
+});
 
-const SidebarFooter = () => {
-  const { user } = useAuth();
-  const { data, isLoading } = useQuery(["profile", user?.id], ({ queryKey }) =>
-    fetchProfileAsync(queryKey[1])
+UserDropdownContent.displayName = "UserDropdownContent";
+
+const SidebarHeader = () => (
+  <header className="flex items-center p-4">
+    <Link
+      href={APP_ROOT_ROUTE}
+      className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-500 text-xl font-bold text-white"
+    >
+      S
+    </Link>
+  </header>
+);
+
+const SidebarFooter = ({ user }: { user: User }) => {
+  const { data: profile, isSuccess } = useQuery(
+    ["user-profile", user.id],
+    ({ queryKey }) => fetchProfileAsync(queryKey[1])
   );
 
-  if (isLoading) {
+  if (!isSuccess) {
     return (
       <div className="flex items-center gap-4 border-t border-slate-200 p-4">
         <div className="h-10 w-10 rounded-full bg-slate-200" />
@@ -170,10 +194,10 @@ const SidebarFooter = () => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="flex items-center gap-4 overflow-hidden border-t border-slate-200 p-4 hover:bg-slate-100">
         <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-slate-200">
-          {data?.avatar_url ? (
+          {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={data.avatar_url}
+              src={profile.avatar_url}
               alt=""
               className="h-full w-full object-cover"
             />
@@ -184,8 +208,8 @@ const SidebarFooter = () => {
           )}
         </div>
         <div className="flex-1 overflow-hidden text-left">
-          <p className="truncate font-medium text-slate-900">{`${data?.first_name} ${data?.last_name}`}</p>
-          <p className="truncate text-xs text-slate-600">{data?.email}</p>
+          <p className="truncate font-medium text-slate-900">{`${profile.first_name} ${profile.last_name}`}</p>
+          <p className="truncate text-xs text-slate-600">{profile.email}</p>
         </div>
         <span className="text-2xl text-slate-600">
           <MdMoreHoriz />
@@ -226,10 +250,17 @@ function ListItemLink(props: ListItemLinkProps) {
 function Header({
   onSidebarOpenChange,
   sidebarOpen,
+  user,
 }: {
   sidebarOpen?: boolean;
   onSidebarOpenChange: (value: boolean) => void;
+  user: User;
 }) {
+  const { data: profile, isSuccess } = useQuery(
+    ["user-profile", user.id],
+    ({ queryKey }) => fetchProfileAsync(queryKey[1])
+  );
+
   return (
     <header className="absolute left-0 right-0 top-0 flex h-14 items-center border-b border-slate-200 bg-white px-4 lg:hidden">
       <button
@@ -239,14 +270,29 @@ function Header({
         <MdMenu />
       </button>
       <div className="flex-1"></div>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger className="flex h-10 w-10 items-center justify-center rounded-md text-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-          <MdPerson />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal>
-          <UserDropdownContent align="end" side="bottom" />
-        </DropdownMenu.Portal>
-      </DropdownMenu.Root>
+      {isSuccess ? (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger className="flex h-10 w-10 items-center justify-center rounded-md text-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={profile.avatar_url}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span className="text-2xl text-slate-400">
+                <MdPerson />
+              </span>
+            )}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <UserDropdownContent align="end" side="bottom" />
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+      ) : (
+        <div className="h-10 w-10 rounded-md bg-slate-200" />
+      )}
     </header>
   );
 }

@@ -1,24 +1,20 @@
 "use client";
 
-import { SellerListItem } from "@/types";
-import React, { ReactNode, useCallback, useState } from "react";
-import Map from "./Map";
+import { ReactNode, useCallback, useState } from "react";
+import Map, { Seller } from "./Map";
 import { MdMap, MdStore } from "react-icons/md";
 import Tab from "@/components/Tab";
 import SellerDetails from "@/components/SellerDetails";
 
-export default function SellerMapTabs({
-  sellers,
-}: {
-  sellers: SellerListItem[];
-}) {
-  const [selectedSellers, setSelectedSellers] = useState<SellerListItem[]>([]);
+export default function SellerMapTabs({ sellers }: { sellers: Seller[] }) {
+  const [selectedSellers, setSelectedSellers] = useState<Seller[]>([]);
   const [tabId, setTabId] = useState("map");
-  const onItemClick = useCallback((seller: SellerListItem) => {
-    setSelectedSellers((sellers) =>
-      sellers.findIndex((item) => item.id === seller.id) === -1
-        ? [...sellers, seller]
-        : sellers
+
+  const onItemClick = useCallback((seller: Seller) => {
+    setSelectedSellers((items) =>
+      items.findIndex((item) => item.id === seller.id) === -1
+        ? [...items, seller]
+        : items
     );
     setTabId(seller.id.toString());
   }, []);
@@ -52,7 +48,7 @@ export default function SellerMapTabs({
               onClick={setTabId}
               onClose={onTabClose}
               value={seller.id.toString()}
-              label={seller.name}
+              label={seller.name || "Unknown"}
               icon={<MdStore />}
               selectedTab={tabId}
             />

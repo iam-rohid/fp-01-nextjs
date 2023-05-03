@@ -1,24 +1,21 @@
-"use client";
-
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { PropsWithChildren } from "react";
 import Header from "./Header";
-import { useAuth } from "@/hooks/useAuth";
-import FullScreenLoading from "@/components/FullScreenLoading";
-import { useRouter } from "next/navigation";
+import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/types/database";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { APP_ROOT_ROUTE } from "@/utils/constant";
 
-export default function AuthLayout({ children }: PropsWithChildren) {
-  const { user, isLoading } = useAuth();
-  const router = useRouter();
+export default async function AuthLayout({ children }: PropsWithChildren) {
+  const supabase = createServerComponentSupabaseClient<Database>({
+    headers,
+    cookies,
+  });
 
-  useEffect(() => {
-    if (!isLoading && !!user) {
-      router.replace(APP_ROOT_ROUTE);
-    }
-  }, [isLoading, router, user]);
+  const { data } = await supabase.auth.getUser();
 
-  if (isLoading || user) {
-    return <FullScreenLoading />;
+  if (!!data.user) {
+    redirect(APP_ROOT_ROUTE);
   }
 
   return (
