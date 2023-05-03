@@ -1,0 +1,57 @@
+.leaflet-container {
+  outline: none;
+}
+
+.seller-marker-popup .seller-marker-popup-name {
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.seller-marker-popup .seller-marker-popup-sales {
+  margin: 0;
+}
+
+.seller-marker-icon {
+  background-color: rgba(251, 191, 36, 0.3);
+  border: 1px solid rgb(251, 191, 36);
+  border-radius: 9999px;
+}
+
+.cluster-marker-icon {
+  background-color: #4f7bff;
+  border-radius: 9999px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.4);
+  font-weight: 500;
+  text-align: center;
+  font-size: 16px;
+}
+
+.spider-leg-polyline {
+  stroke-width: 1px;
+  stroke: rgba(0, 0, 0, 0.2);
+  transition: all ease-in;
+}
+
+.leaflet-left .leaflet-control {
+  @apply ml-4 mt-4 overflow-hidden rounded-lg border border-slate-200 shadow-xl;
+}
+
+.leaflet-touch .leaflet-bar a {
+  @apply flex h-10 w-10 items-center justify-center bg-white text-2xl hover:bg-slate-100;
+}
+
+.leaflet-touch .leaflet-bar a.leaflet-disabled {
+  @apply bg-white;
+}
+
+.leaflet-touch .leaflet-bar a span {
+  @apply leading-4;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply rounded-lg border border-slate-200 bg-white shadow-xl;
+}

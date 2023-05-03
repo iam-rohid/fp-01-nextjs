@@ -9,7 +9,7 @@ import AuthProvider from "@/providers/AuthProvider";
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} className="min-h-screen">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>{children}</AuthProvider>
         </QueryClientProvider>

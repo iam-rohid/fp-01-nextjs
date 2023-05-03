@@ -16,7 +16,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import clsx from "clsx";
 import { Fragment, ReactNode, useState } from "react";
 import Link from "next/link";
-import { fetchProfileAsync } from "@/api/profile";
+import { fetchProfileAsync } from "@/service/profile";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import { APP_ROOT_ROUTE } from "@/utils/constant";
