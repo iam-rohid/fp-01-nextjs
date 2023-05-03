@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import supabase from "@/libs/supabase";
 import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
+import { APP_ROOT_ROUTE } from "@/utils/constant";
 
 const schema = yup
   .object({
@@ -63,7 +64,7 @@ export default function SignUpForm() {
     }
 
     console.log("Sign Up Success", data);
-    router.replace("/");
+    router.replace(APP_ROOT_ROUTE);
   });
 
   if (isSubmitSuccessful) {

@@ -1,3 +1,5 @@
+"use client";
+
 import L from "leaflet";
 import "leaflet.markercluster";
 import { useEffect, useRef } from "react";
@@ -7,7 +9,6 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
-import { SellersResponse } from "./page";
 
 export type Seller = {
   id: number;
