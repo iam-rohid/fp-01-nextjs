@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "next-js",
+      "path": "./"
+    },
+    {
+      "name": "supabase",
+      "path": "./supabase"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "supabase": true
+    }
+  }
+}
