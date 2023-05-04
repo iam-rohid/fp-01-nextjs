@@ -1,20 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@12.3.0?target=deno";
+import { cryptoProvider, stripe } from "../_utils/stripe.ts";
 
 serve(async (request) => {
   try {
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"), {
-      apiVersion: "2022-11-15",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
-    const cryptoProvider = Stripe.createSubtleCryptoProvider();
-
     const signature = request.headers.get("stripe-signature");
     const payload = await request.text();
 
     const event = await stripe.webhooks.constructEventAsync(
       payload,
-      signature,
+      signature!,
       Deno.env.get("STRIPE_WEBHOOKS_SECRET"),
       undefined,
       cryptoProvider,
