@@ -19,7 +19,7 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="space-y-16">
       <Header />
       {children}
     </div>

@@ -23,7 +23,6 @@ import {
 } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { APP_ROOT_ROUTE } from "@/utils/constant";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileAsync } from "@/service/profile";
 import supabase from "@/libs/supabase";
@@ -59,27 +58,23 @@ const SidebarList = () => {
   return (
     <div className="flex-1 overflow-y-auto p-4">
       <nav className="space-y-px">
-        <ListItemLink
-          href={APP_ROOT_ROUTE}
-          icon={<MdHome />}
-          isActive={pathname === APP_ROOT_ROUTE}
-        >
+        <ListItemLink href="/" icon={<MdHome />} isActive={pathname === "/"}>
           Home
         </ListItemLink>
       </nav>
       <p className="mb-2 mt-8 px-4 text-sm uppercase text-slate-400">Tools</p>
       <nav className="space-y-px">
         <ListItemLink
-          href={`${APP_ROOT_ROUTE}/sellers`}
+          href="/sellers"
           icon={<MdStore />}
-          isActive={pathname.startsWith(`${APP_ROOT_ROUTE}/sellers`)}
+          isActive={pathname.startsWith("/sellers")}
         >
           Sellers
         </ListItemLink>
         <ListItemLink
-          href={`${APP_ROOT_ROUTE}/seller-map`}
+          href="/seller-map"
           icon={<MdMap />}
-          isActive={pathname.startsWith(`${APP_ROOT_ROUTE}/seller-map`)}
+          isActive={pathname.startsWith("/seller-map")}
         >
           Seller Map
         </ListItemLink>
@@ -95,17 +90,17 @@ const UserDropdownContent = forwardRef<
   HTMLDivElement,
   UserDropdownContentProps
 >((props, ref) => {
-  const rotuer = useRouter();
+  const router = useRouter();
 
   const handleSignOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
       console.log("Sign out success");
-      rotuer.replace("/signin");
+      router.refresh();
     } catch (e) {
       console.error("Failed to sign out", e);
     }
-  }, [rotuer]);
+  }, [router]);
 
   return (
     <DropdownMenu.Content
@@ -115,7 +110,7 @@ const UserDropdownContent = forwardRef<
     >
       <DropdownMenu.Item asChild>
         <Link
-          href={`${APP_ROOT_ROUTE}/account`}
+          href="/account"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
@@ -126,7 +121,7 @@ const UserDropdownContent = forwardRef<
       </DropdownMenu.Item>
       <DropdownMenu.Item asChild>
         <Link
-          href={`${APP_ROOT_ROUTE}/subscription`}
+          href="/subscription"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
@@ -137,7 +132,7 @@ const UserDropdownContent = forwardRef<
       </DropdownMenu.Item>
       <DropdownMenu.Item asChild>
         <Link
-          href={`${APP_ROOT_ROUTE}/billing`}
+          href="/billing"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
           <span className="mr-4 text-2xl">
@@ -167,7 +162,7 @@ UserDropdownContent.displayName = "UserDropdownContent";
 const SidebarHeader = () => (
   <header className="flex items-center p-4">
     <Link
-      href={APP_ROOT_ROUTE}
+      href="/"
       className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-500 text-xl font-bold text-white"
     >
       S
@@ -208,8 +203,12 @@ const SidebarFooter = ({ user }: { user: User }) => {
           )}
         </div>
         <div className="flex-1 overflow-hidden text-left">
-          <p className="truncate font-medium text-slate-900">{`${profile.first_name} ${profile.last_name}`}</p>
-          <p className="truncate text-xs text-slate-600">{profile.email}</p>
+          <p className="truncate font-medium text-slate-900">
+            {profile.name || "Unknown Name"}
+          </p>
+          <p className="truncate text-xs text-slate-600">
+            {profile.email || "Unknwon Email"}
+          </p>
         </div>
         <span className="text-2xl text-slate-600">
           <MdMoreHoriz />

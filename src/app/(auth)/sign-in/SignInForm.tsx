@@ -51,7 +51,7 @@ export default function SignInForm() {
     }
 
     console.log("Sign In Success", data);
-    router.replace(APP_ROOT_ROUTE);
+    router.refresh();
   });
 
   return (
