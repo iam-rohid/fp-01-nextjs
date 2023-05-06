@@ -19,7 +19,7 @@ export default function SignUp() {
 
       <p>
         Already have an account?{" "}
-        <Link href="/sign-in" className="font-medium text-primary-500">
+        <Link href="/login" className="font-medium text-primary-500">
           Sign In
         </Link>
       </p>

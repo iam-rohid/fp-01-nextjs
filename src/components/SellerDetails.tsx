@@ -1,3 +1,5 @@
+"use client";
+
 import supabase from "@/libs/supabase";
 import { useQuery } from "@tanstack/react-query";
 import CircularProgress from "./CircularProgress";
@@ -7,7 +9,7 @@ import clsx from "clsx";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
 
-const fetchSeller = async (sellerId: number) => {
+const fetchSeller = async (sellerId: string) => {
   const { data, error } = await supabase
     .from("sellers")
     .select("*")
@@ -24,14 +26,14 @@ const fetchSeller = async (sellerId: number) => {
   return data;
 };
 
-export default function SellerDetails({ sellerId }: { sellerId: number }) {
+export default function SellerDetails({ sellerId }: { sellerId: string }) {
   const {
     data: seller,
     isLoading,
     isError,
     error,
   } = useQuery(["seller", sellerId], ({ queryKey }) =>
-    fetchSeller(queryKey[1] as number)
+    fetchSeller(queryKey[1])
   );
   if (isLoading) {
     return (

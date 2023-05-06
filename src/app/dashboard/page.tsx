@@ -1,7 +1,7 @@
 import AppBar from "./AppBar";
 
 export const metadata = {
-  title: "Home",
+  title: "Home - Dashboard",
 };
 
 export default function Home() {

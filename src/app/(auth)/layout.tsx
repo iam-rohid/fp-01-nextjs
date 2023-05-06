@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { Fragment, PropsWithChildren } from "react";
 import Header from "./Header";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database";
@@ -19,9 +19,9 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="space-y-16">
+    <Fragment>
       <Header />
-      {children}
-    </div>
+      <main className="my-16">{children}</main>
+    </Fragment>
   );
 }

@@ -20,7 +20,7 @@ export default function SignIn() {
       <div>
         <p>
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="font-medium text-primary-500">
+          <Link href="/signup" className="font-medium text-primary-500">
             Sign Up
           </Link>
         </p>

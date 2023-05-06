@@ -22,7 +22,7 @@ export default function ForgotPassword() {
 
       <p>
         Go back to{" "}
-        <Link href="/sign-in" className="font-medium text-primary-500">
+        <Link href="/login" className="font-medium text-primary-500">
           Sign In Page
         </Link>
       </p>

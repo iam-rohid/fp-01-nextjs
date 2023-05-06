@@ -8,7 +8,7 @@ import { range } from "@/utils/range";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet/dist/leaflet.css";
-import "./map.css";
+import "./seller-map.css";
 
 export type Seller = {
   id: number;
@@ -18,16 +18,17 @@ export type Seller = {
   longitude: number;
 };
 
-export type MapProps = {
+export type SellerMapProps = {
   sellers: Seller[];
   onItemClick?: (seller: Seller) => void;
 };
 
-export default function Map({ sellers, onItemClick }: MapProps) {
+export function SellerMap({ sellers, onItemClick }: SellerMapProps) {
   const mapDivRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!mapDivRef.current) return;
     mapRef.current = L.map(mapDivRef.current).setView([51.505, -0.09], 4);
 
@@ -118,5 +119,5 @@ export default function Map({ sellers, onItemClick }: MapProps) {
     };
   }, [mapRef, sellers, onItemClick]);
 
-  return <div ref={mapDivRef} className="absolute inset-0 z-0" />;
+  return <div ref={mapDivRef} className="z-0 h-full w-full" />;
 }

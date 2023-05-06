@@ -1,6 +1,6 @@
 import { APP_NAME } from "@/utils/constant";
 import Link from "next/link";
-import React from "react";
+import { MdExpandMore } from "react-icons/md";
 
 export default function Header() {
   return (
@@ -12,6 +12,27 @@ export default function Header() {
               {APP_NAME}
             </Link>
           </div>
+
+          <nav className="flex items-center justify-center gap-4">
+            <button className="flex items-center text-slate-600 hover:text-slate-900">
+              Features
+              <span>
+                <MdExpandMore />
+              </span>
+            </button>
+            <Link
+              className="text-slate-600 hover:text-slate-900"
+              href="/seller-map"
+            >
+              Seller Map
+            </Link>
+            <Link
+              className="text-slate-600 hover:text-slate-900"
+              href="/pricing"
+            >
+              Pricing
+            </Link>
+          </nav>
 
           <nav className="flex flex-1 items-center justify-end gap-4">
             <Link className="text-slate-600 hover:text-slate-900" href="/login">
