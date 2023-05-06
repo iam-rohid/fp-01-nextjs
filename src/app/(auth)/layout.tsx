@@ -4,7 +4,6 @@ import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-next
 import { Database } from "@/types/database";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { APP_ROOT_ROUTE } from "@/utils/constant";
 
 export default async function AuthLayout({ children }: PropsWithChildren) {
   const supabase = createServerComponentSupabaseClient<Database>({
@@ -15,7 +14,7 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
   const { data } = await supabase.auth.getUser();
 
   if (!!data.user) {
-    redirect(APP_ROOT_ROUTE);
+    redirect("/dashboard");
   }
 
   return (

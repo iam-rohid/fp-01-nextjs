@@ -8,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorBox from "@/components/ErrorBox";
 import supabase from "@/libs/supabase";
 import { useRouter } from "next/navigation";
-import { APP_ROOT_ROUTE } from "@/utils/constant";
 
 const schema = yup
   .object({
