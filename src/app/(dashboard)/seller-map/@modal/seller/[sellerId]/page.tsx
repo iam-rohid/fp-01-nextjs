@@ -58,7 +58,7 @@ export default async function Seller({
         </h1>
         <div className="inline-flex flex-wrap gap-4">
           <Link
-            href={`/dashboard/sellers/${sellerId}`}
+            href={`/sellers/${sellerId}`}
             className="inline-flex items-center gap-1 text-primary-500 hover:underline"
           >
             View Detials

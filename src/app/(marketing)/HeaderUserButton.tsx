@@ -4,6 +4,7 @@ import {
   MdAutoAwesome,
   MdDashboard,
   MdExpandMore,
+  MdHome,
   MdLogout,
   MdPayments,
   MdPerson,
@@ -60,17 +61,17 @@ export default function HeaderUserButton({
         >
           <DropdownMenu.Item asChild>
             <Link
-              href="/dashboard"
+              href="/home"
               className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
             >
-              <MdDashboard className="mr-4 text-2xl" />
-              Dashboard
+              <MdHome className="mr-4 text-2xl" />
+              Home
             </Link>
           </DropdownMenu.Item>
 
           <DropdownMenu.Item asChild>
             <Link
-              href="/dashboard/account"
+              href="/account"
               className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
             >
               <MdPerson className="mr-4 text-2xl" />
@@ -79,7 +80,7 @@ export default function HeaderUserButton({
           </DropdownMenu.Item>
           <DropdownMenu.Item asChild>
             <Link
-              href="/dashboard/subscription"
+              href="/subscription"
               className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
             >
               <MdAutoAwesome className="mr-4 text-2xl" />
@@ -88,7 +89,7 @@ export default function HeaderUserButton({
           </DropdownMenu.Item>
           <DropdownMenu.Item asChild>
             <Link
-              href="/dashboard/billing"
+              href="/billing"
               className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
             >
               <MdPayments className="mr-4 text-2xl" />

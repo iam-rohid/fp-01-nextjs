@@ -24,12 +24,6 @@ export default function Header() {
             </button>
             <Link
               className="text-slate-600 hover:text-slate-900"
-              href="/seller-map"
-            >
-              Seller Map
-            </Link>
-            <Link
-              className="text-slate-600 hover:text-slate-900"
               href="/pricing"
             >
               Pricing

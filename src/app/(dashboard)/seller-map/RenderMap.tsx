@@ -13,7 +13,7 @@ export default function RenderMap({ sellers }: { sellers: Seller[] }) {
 
   const onItemClick = useCallback(
     (seller: Seller) => {
-      router.push(`/dashboard/seller-map/seller/${seller.id}`);
+      router.push(`/seller-map/seller/${seller.id}`);
     },
     [router]
   );
