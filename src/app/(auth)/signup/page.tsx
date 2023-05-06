@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignUp() {
   return (
-    <div className="mx-auto w-full max-w-md space-y-8 px-4">
+    <div className="mx-auto w-full max-w-md space-y-8 px-6">
       <div>
         <h3 className="mb-2 text-3xl font-semibold text-slate-800">
           Get started
@@ -19,7 +19,7 @@ export default function SignUp() {
 
       <p>
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary-500">
+        <Link href="/signin" className="font-medium text-primary-500">
           Sign In
         </Link>
       </p>

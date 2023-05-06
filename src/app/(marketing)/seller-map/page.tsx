@@ -41,8 +41,8 @@ export default async function PublicSellerMap() {
   }));
 
   return (
-    <div className="h-[calc(100vh-4rem)] w-full overflow-hidden">
+    <main className="h-[calc(100vh-4rem)] w-full overflow-hidden">
       <SellerMap sellers={sellers} />
-    </div>
+    </main>
   );
 }

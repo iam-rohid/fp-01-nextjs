@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignIn() {
   return (
-    <div className="mx-auto w-full max-w-md space-y-8 px-4">
+    <div className="mx-auto w-full max-w-md space-y-8 px-6">
       <div>
         <h3 className="mb-2 text-3xl font-semibold text-slate-800">
           Welcome back

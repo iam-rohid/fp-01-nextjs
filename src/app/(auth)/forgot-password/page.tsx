@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function ForgotPassword() {
   return (
-    <div className="mx-auto w-full max-w-md space-y-8 px-4">
+    <div className="mx-auto w-full max-w-md space-y-8 px-6">
       <div>
         <h3 className="mb-2 text-3xl font-semibold text-slate-800">
           Reset Your Password
@@ -22,7 +22,7 @@ export default function ForgotPassword() {
 
       <p>
         Go back to{" "}
-        <Link href="/login" className="font-medium text-primary-500">
+        <Link href="/signin" className="font-medium text-primary-500">
           Sign In Page
         </Link>
       </p>

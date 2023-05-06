@@ -27,7 +27,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         disabled={loading || disabled}
         className={clsx(
-          "flex items-center justify-center rounded-lg px-4 py-2.5 text-center font-medium",
+          "flex h-12 items-center justify-center rounded-lg px-6 text-center font-medium",
           {
             "bg-primary-500 text-white hover:bg-primary-600 disabled:bg-primary-500/80 disabled:text-white/80":
               variant === "primary",
