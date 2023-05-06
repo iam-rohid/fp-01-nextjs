@@ -118,13 +118,7 @@ export default function PricingPlansGroup() {
 
       <div className="flex flex-wrap justify-center gap-6">
         {plans.map((plan, i) => (
-          <PlanCard
-            key={i}
-            plan={plan}
-            isYearly={!isMonthly}
-            isCurrentPlan={i === 0}
-            href="/signin"
-          />
+          <PlanCard key={i} plan={plan} isYearly={!isMonthly} href="/signin" />
         ))}
       </div>
     </div>

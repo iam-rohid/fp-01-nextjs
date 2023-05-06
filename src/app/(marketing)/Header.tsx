@@ -1,7 +1,8 @@
-import SignInSignUpButtonGroup from "@/components/SignInSignUpButtonGroup";
 import { APP_NAME } from "@/utils/constant";
 import Link from "next/link";
 import { MdExpandMore, MdMenu } from "react-icons/md";
+import { Suspense } from "react";
+import HeaderAuth from "./HeaderAuth";
 
 export default function Header() {
   return (
@@ -36,7 +37,10 @@ export default function Header() {
           </nav>
 
           <div className="flex flex-1 items-center justify-end gap-4">
-            <SignInSignUpButtonGroup />
+            <Suspense fallback={<p>Loading...</p>}>
+              {/* @ts-expect-error Async Server Component */}
+              <HeaderAuth />
+            </Suspense>
 
             <button className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-500/10 text-2xl text-primary-500 hover:bg-primary-500/20 lg:hidden">
               <MdMenu />

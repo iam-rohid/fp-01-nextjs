@@ -93,9 +93,13 @@ export default function PlanCard({
             ? "bg-white text-primary-500 hover:shadow-xl"
             : "bg-primary-500 text-white hover:shadow-xl hover:shadow-primary-500/20"
         )}
-        href={href}
+        href={plan.contactSales ? "/connect/enterprise" : href}
       >
-        {isCurrentPlan ? "Current Plan" : `Upgrade to ${plan.name}`}
+        {isCurrentPlan
+          ? "Current Plan"
+          : plan.contactSales
+          ? "Contact Sales"
+          : `Upgrade to ${plan.name}`}
       </Link>
       <div className="my-8">
         {!!plan.featuresTitle && (

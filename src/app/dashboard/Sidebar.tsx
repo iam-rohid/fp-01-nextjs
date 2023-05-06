@@ -108,7 +108,7 @@ const UserDropdownContent = forwardRef<
 
   return (
     <DropdownMenu.Content
-      className="z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+      className="z-50 rounded-xl bg-white p-2 shadow-xl ring-1 ring-slate-200"
       {...props}
       ref={ref}
     >
@@ -117,9 +117,7 @@ const UserDropdownContent = forwardRef<
           href="/dashboard/account"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
-          <span className="mr-4 text-2xl">
-            <MdPerson />
-          </span>
+          <MdPerson className="mr-4 text-2xl" />
           Account
         </Link>
       </DropdownMenu.Item>
@@ -128,9 +126,7 @@ const UserDropdownContent = forwardRef<
           href="/dashboard/subscription"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
-          <span className="mr-4 text-2xl">
-            <MdAutoAwesome />
-          </span>
+          <MdAutoAwesome className="mr-4 text-2xl" />
           Subscription
         </Link>
       </DropdownMenu.Item>
@@ -139,9 +135,7 @@ const UserDropdownContent = forwardRef<
           href="/dashboard/billing"
           className="flex w-full rounded-md px-4 py-2 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
         >
-          <span className="mr-4 text-2xl">
-            <MdPayments />
-          </span>
+          <MdPayments className="mr-4 text-2xl" />
           Billing
         </Link>
       </DropdownMenu.Item>
@@ -151,9 +145,7 @@ const UserDropdownContent = forwardRef<
           onClick={handleSignOut}
           className="flex w-full items-center rounded-md px-4 py-2 text-red-400 outline-none focus:bg-red-500/5 focus:text-red-500"
         >
-          <span className="mr-4 text-2xl">
-            <MdLogout />
-          </span>
+          <MdLogout className="mr-4 text-2xl" />
           Sign Out
         </button>
       </DropdownMenu.Item>
