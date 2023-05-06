@@ -1,10 +1,15 @@
-import { SellerMap } from "@/components/SellerMap";
 import { Database } from "@/types/database";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const metadata = {
+const SellerMap = dynamic(() => import("@/components/SellerMap/SellerMap"), {
+  ssr: false,
+});
+
+export const metadata: Metadata = {
   title: "Seller Map",
 };
 

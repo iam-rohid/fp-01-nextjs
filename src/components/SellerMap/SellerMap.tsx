@@ -23,7 +23,7 @@ export type SellerMapProps = {
   onItemClick?: (seller: Seller) => void;
 };
 
-export function SellerMap({ sellers, onItemClick }: SellerMapProps) {
+export default function SellerMap({ sellers, onItemClick }: SellerMapProps) {
   const mapDivRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
 
