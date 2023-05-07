@@ -39,7 +39,7 @@ export default async function HeaderAuth() {
         Sign In
       </Link>
       <Link
-        className="flex h-12 items-center rounded-full bg-primary-500 px-8 text-white transition-shadow hover:shadow-xl hover:shadow-primary-500/20"
+        className="flex h-12 items-center rounded-full bg-primary-500 px-6 text-white transition-colors hover:bg-primary-600"
         href="/signup"
       >
         Sign Up

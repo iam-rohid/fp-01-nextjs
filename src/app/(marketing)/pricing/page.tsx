@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   return (
-    <main className="mx-auto my-16 max-w-screen-2xl space-y-16 px-6">
+    <main className="mx-auto my-16 max-w-screen-xl space-y-16 px-6">
       <section id="plans">
-        <h1 className="my-16 text-center text-5xl font-medium text-slate-800">
+        <h1 className="mx-auto my-16 max-w-3xl text-center text-6xl font-bold text-slate-800">
           Choose the plan that fits your needs.
         </h1>
         <PricingPlansGroup />

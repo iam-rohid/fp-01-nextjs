@@ -3,17 +3,18 @@ import Link from "next/link";
 import { MdExpandMore, MdMenu } from "react-icons/md";
 import { Suspense } from "react";
 import HeaderAuth from "./HeaderAuth";
+import CircularProgress from "@/components/CircularProgress";
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-20 bg-white ring-1 ring-slate-200">
-      <div className="mx-auto max-w-screen-2xl px-6">
-        <div className="flex h-20 items-center gap-8">
+      <div className="mx-auto max-w-screen-xl px-6">
+        <div className="flex h-16 items-center gap-8">
           <Link href="/" className="text-2xl font-semibold text-slate-900">
             {APP_NAME}
           </Link>
 
-          <nav className="flex items-center justify-center gap-4 max-lg:hidden">
+          <nav className="flex items-center justify-center gap-6 max-lg:hidden">
             <button className="flex items-center text-slate-600 hover:text-slate-900">
               Features
               <MdExpandMore className="text-xl" />
@@ -31,7 +32,7 @@ export default function Header() {
           </nav>
 
           <div className="flex flex-1 items-center justify-end gap-4">
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<CircularProgress />}>
               {/* @ts-expect-error Async Server Component */}
               <HeaderAuth />
             </Suspense>

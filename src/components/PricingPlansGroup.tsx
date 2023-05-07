@@ -34,7 +34,7 @@ const ENTERPRISE_FEATURES = [
 
 const plans: SubscriptionPlan[] = [
   {
-    name: "Basic",
+    name: "Starter",
     subtitle: "Recommended for New Sellers",
     features: BASIC_FEATURES,
     price: {
@@ -42,16 +42,16 @@ const plans: SubscriptionPlan[] = [
       yearly: 300,
     },
   },
-  {
-    name: "Essentials",
-    subtitle: "Recommended for Resellers and Private Label",
-    features: PLUS_FEATURES,
-    price: {
-      monthly: 97,
-      yearly: 900,
-    },
-    featuresTitle: "Everything in Basic plus",
-  },
+  // {
+  //   name: "Essentials",
+  //   subtitle: "Recommended for Resellers and Private Label",
+  //   features: PLUS_FEATURES,
+  //   price: {
+  //     monthly: 97,
+  //     yearly: 900,
+  //   },
+  //   featuresTitle: "Everything in Basic plus",
+  // },
   {
     name: "Business",
     subtitle: "Recommended for Brands",
@@ -82,20 +82,20 @@ export default function PricingPlansGroup() {
   return (
     <div>
       <div className="mb-8 flex items-center justify-center">
-        <div className="relative h-16 w-full max-w-[320px] rounded-full border border-slate-200 bg-white p-1">
+        <div className="relative h-16 w-full max-w-[300px] rounded-full border border-slate-200 bg-slate-100 p-1">
           <div
             className={clsx(
               "absolute bottom-0 top-0 w-1/2 p-1 transition-[left]",
               isMonthly ? "left-0" : "left-1/2"
             )}
           >
-            <div className="h-full w-full rounded-full bg-primary-500"></div>
+            <div className="h-full w-full rounded-full bg-white ring-1 ring-slate-200"></div>
           </div>
           <div className="absolute inset-0 flex">
             <button
               className={clsx(
                 "flex h-full flex-1 items-center justify-center font-medium transition-colors",
-                isMonthly ? "text-white" : "text-slate-600 hover:text-slate-900"
+                isMonthly ? "text-slate-900" : "text-slate-600"
               )}
               onClick={() => setIsMonthly(true)}
             >
@@ -104,9 +104,7 @@ export default function PricingPlansGroup() {
             <button
               className={clsx(
                 "flex h-full flex-1 items-center justify-center font-medium transition-colors",
-                !isMonthly
-                  ? "text-white"
-                  : "text-slate-600 hover:text-slate-900"
+                !isMonthly ? "text-slate-900" : "text-slate-600"
               )}
               onClick={() => setIsMonthly(false)}
             >
@@ -116,7 +114,7 @@ export default function PricingPlansGroup() {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="flex gap-6 max-lg:flex-col max-lg:items-center">
         {plans.map((plan, i) => (
           <PlanCard key={i} plan={plan} isYearly={!isMonthly} href="/signin" />
         ))}
