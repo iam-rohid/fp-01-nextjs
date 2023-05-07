@@ -41,29 +41,32 @@ export default function SignUpForm({ email }: { email?: string }) {
   });
   const router = useRouter();
 
-  const onSubmit = handleSubmit(async (fields) => {
-    console.log(fields);
-    const { error } = await supabase.auth.signUp({
-      email: fields.email,
-      password: fields.password,
-      options: {
-        data: {
-          first_name: fields.first_name,
-          last_name: fields.last_name,
+  const onSubmit = handleSubmit(
+    async ({ email, password, first_name, last_name }) => {
+      const emailRedirectTo = `${window.origin}/welcome`;
+      console.log({ emailRedirectTo });
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name,
+            last_name,
+          },
+          emailRedirectTo,
         },
-        emailRedirectTo: `${window.origin}/welcome`,
-      },
-    });
-    if (error) {
-      console.log("Sign Up Failed", error);
-      setError("root", {
-        message: error.message,
       });
-      return;
-    }
+      if (error) {
+        console.log("Sign Up Failed", error);
+        setError("root", {
+          message: error.message,
+        });
+        return;
+      }
 
-    router.replace(`/verify-email?email=${fields.email}`);
-  });
+      router.replace(`/verify-email?email=${email}`);
+    }
+  );
 
   return (
     <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
