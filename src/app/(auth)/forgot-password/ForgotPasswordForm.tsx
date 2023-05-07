@@ -7,7 +7,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import supabase from "@/libs/supabase";
 import { MdCheck } from "react-icons/md";
-import { APP_NAME } from "@/utils/constant";
 
 const schema = yup
   .object({

@@ -49,7 +49,9 @@ export default function SignInForm({ email }: { email?: string }) {
       setError("root", {
         message: error.message,
       });
-      router.push(`/verify-email?email=${email}`);
+      if (error.message === "Email not confirmed") {
+        router.push(`/verify-email?email=${email}`);
+      }
       return;
     }
   });
