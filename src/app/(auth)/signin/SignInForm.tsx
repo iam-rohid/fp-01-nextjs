@@ -25,7 +25,7 @@ const schema = yup
 
 type FormData = yup.InferType<typeof schema>;
 
-export default function SignInForm() {
+export default function SignInForm({ email }: { email?: string }) {
   const {
     register,
     handleSubmit,
@@ -33,12 +33,15 @@ export default function SignInForm() {
     setError,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email,
+    },
   });
   const router = useRouter();
-  const onSubmit = handleSubmit(async (fields) => {
+  const onSubmit = handleSubmit(async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: fields.email,
-      password: fields.password,
+      email,
+      password,
     });
 
     if (error) {
@@ -46,11 +49,9 @@ export default function SignInForm() {
       setError("root", {
         message: error.message,
       });
+      router.push(`/verify-email?email=${email}`);
       return;
     }
-
-    console.log("Sign In Success", data);
-    router.refresh();
   });
 
   return (
@@ -60,8 +61,9 @@ export default function SignInForm() {
         placeholder="Your email address"
         label="Email *"
         error={errors.email?.message}
-        autoComplete="username"
+        autoComplete="email"
         {...register("email")}
+        autoFocus
       />
       <TextField
         className="w-full"

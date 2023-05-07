@@ -5,7 +5,11 @@ export const metadata = {
   title: "Sign In",
 };
 
-export default function SignIn() {
+export default function SignIn({
+  searchParams: { email },
+}: {
+  searchParams: { email?: string };
+}) {
   return (
     <div className="mx-auto w-full max-w-md space-y-8 px-6">
       <div>
@@ -15,7 +19,7 @@ export default function SignIn() {
         <p className="text-slate-600">Sign in to your account</p>
       </div>
 
-      <SignInForm />
+      <SignInForm email={email} />
 
       <div>
         <p>

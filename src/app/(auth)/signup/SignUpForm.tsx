@@ -9,10 +9,12 @@ import supabase from "@/libs/supabase";
 import ErrorBox from "@/components/ErrorBox";
 import { MdCheck } from "react-icons/md";
 import { APP_NAME } from "@/utils/constant";
+import { useRouter } from "next/navigation";
 
 const schema = yup
   .object({
-    name: yup.string().required("Name is a required field"),
+    first_name: yup.string().required("Name is a required field"),
+    last_name: yup.string().required("Name is a required field"),
     email: yup
       .string()
       .required("Email is required")
@@ -22,16 +24,12 @@ const schema = yup
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")
       .max(16, "Password must be at most 16 characters"),
-    confirmPassword: yup
-      .string()
-      .required("Please confirm your new password")
-      .oneOf([yup.ref("password")], "Passwords does not match"),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
 
-export default function SignUpForm() {
+export default function SignUpForm({ email }: { email?: string }) {
   const {
     register,
     handleSubmit,
@@ -39,7 +37,12 @@ export default function SignUpForm() {
     setError,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email,
+    },
   });
+  const router = useRouter();
+
   const onSubmit = handleSubmit(async (fields) => {
     console.log(fields);
     const { data, error } = await supabase.auth.signUp({
@@ -47,7 +50,8 @@ export default function SignUpForm() {
       password: fields.password,
       options: {
         data: {
-          name: fields.name,
+          first_name: fields.first_name,
+          last_name: fields.last_name,
         },
       },
     });
@@ -59,48 +63,57 @@ export default function SignUpForm() {
       return;
     }
 
-    console.log("Sign Up Success", data);
+    router.replace(`/verify-email?email=${fields.email}`);
   });
 
-  if (isSubmitSuccessful) {
-    return (
-      <div className="flex gap-4 bg-emerald-50 p-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500">
-          <MdCheck className="text-2xl text-white" />
-        </div>
-        <div className="flex-1">
-          <h3 className="mb-2 text-lg font-semibold text-emerald-500">
-            Check your email to confirm
-          </h3>
-          <p className="text-emerald-500">
-            You&apos;ve successfully signed up. Please check your email to
-            confirm your account before signing in to the {APP_NAME} dashboard
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (isSubmitSuccessful) {
+  //   return (
+  //     <div className="flex gap-4 bg-emerald-50 p-4">
+  //       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500">
+  //         <MdCheck className="text-2xl text-white" />
+  //       </div>
+  //       <div className="flex-1">
+  //         <h3 className="mb-2 text-lg font-semibold text-emerald-500">
+  //           Check your email to confirm
+  //         </h3>
+  //         <p className="text-emerald-500">
+  //           You&apos;ve successfully signed up. Please check your email to
+  //           confirm your account before signing in to the {APP_NAME} dashboard
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
         <TextField
-          className="mb-4 w-full"
-          label="Your Name *"
-          placeholder="John Doe"
-          {...register("name")}
-          error={errors.name?.message}
+          className="col-span-1"
+          label="First Name *"
+          placeholder="John"
+          {...register("first_name")}
+          error={errors.first_name?.message}
+          autoFocus
         />
         <TextField
-          className="mb-4 w-full"
+          className="col-span-1"
+          label="Last Name *"
+          placeholder="Doe"
+          {...register("last_name")}
+          error={errors.last_name?.message}
+        />
+        <TextField
+          className="col-span-2"
           label="Email *"
           placeholder="john@example.com"
           {...register("email")}
+          autoComplete="username"
           error={errors.email?.message}
-          type="new-email"
+          disabled
         />
         <TextField
-          className="mb-4 w-full"
+          className="col-span-2"
           label="Password *"
           placeholder="8-16 characters"
           type="password"
@@ -108,20 +121,13 @@ export default function SignUpForm() {
           {...register("password")}
           error={errors.password?.message}
         />
-        <TextField
-          className="w-full"
-          label="Confirm Password *"
-          placeholder="re-enter the password"
-          type="password"
-          autoComplete="current-password"
-          {...register("confirmPassword")}
-          error={errors.confirmPassword?.message}
-        />
 
-        <ErrorBox error={errors.root?.message} />
+        <div className="col-span-2">
+          <ErrorBox error={errors.root?.message} />
+        </div>
 
-        <Button className="my-8" fullWidth loading={isSubmitting}>
-          Register
+        <Button className="col-span-2" fullWidth loading={isSubmitting}>
+          Create Account
         </Button>
       </form>
     </div>

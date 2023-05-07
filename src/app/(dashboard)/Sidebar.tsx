@@ -22,7 +22,7 @@ import {
   useState,
 } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileAsync } from "@/service/profile";
 import supabase from "@/libs/supabase";
@@ -94,17 +94,13 @@ const UserDropdownContent = forwardRef<
   HTMLDivElement,
   UserDropdownContentProps
 >((props, ref) => {
-  const router = useRouter();
-
   const handleSignOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
-      console.log("Sign out success");
-      router.refresh();
     } catch (e) {
       console.error("Failed to sign out", e);
     }
-  }, [router]);
+  }, []);
 
   return (
     <DropdownMenu.Content
@@ -200,7 +196,9 @@ const SidebarFooter = ({ user }: { user: User }) => {
         </div>
         <div className="flex-1 overflow-hidden text-left">
           <p className="truncate font-medium text-slate-900">
-            {profile.name || "Unknown Name"}
+            {profile.first_name
+              ? `${profile.first_name} ${profile.last_name}`
+              : "Unknown Name"}
           </p>
           <p className="truncate text-xs text-slate-600">
             {profile.email || "Unknwon Email"}

@@ -1,4 +1,3 @@
-import CircularProgress from "@/components/CircularProgress";
 import { Database } from "@/types/database";
 import { APP_NAME } from "@/utils/constant";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";

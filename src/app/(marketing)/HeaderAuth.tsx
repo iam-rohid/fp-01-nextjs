@@ -16,15 +16,19 @@ export default async function HeaderAuth() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    const { data } = await supabase
+    const { data: profile } = await supabase
       .from("profiles")
-      .select("name,avatar_url")
+      .select("*")
       .eq("id", user?.id)
       .single();
     return (
       <HeaderUserButton
-        label={data?.name || user.email || "Unknown Name"}
-        avatarUrl={data?.avatar_url || undefined}
+        label={
+          profile?.first_name
+            ? `${profile.first_name} ${profile.last_name}`
+            : "Unknown Name"
+        }
+        avatarUrl={profile?.avatar_url || undefined}
       />
     );
   }

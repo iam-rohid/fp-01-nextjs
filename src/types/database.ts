@@ -14,8 +14,9 @@ export interface Database {
           avatar_url: string | null
           created_at: string | null
           email: string | null
+          first_name: string | null
           id: string
-          name: string | null
+          last_name: string | null
           stripe_customer_id: string | null
           updated_at: string | null
         }
@@ -23,8 +24,9 @@ export interface Database {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
+          first_name?: string | null
           id: string
-          name?: string | null
+          last_name?: string | null
           stripe_customer_id?: string | null
           updated_at?: string | null
         }
@@ -32,8 +34,9 @@ export interface Database {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
+          first_name?: string | null
           id?: string
-          name?: string | null
+          last_name?: string | null
           stripe_customer_id?: string | null
           updated_at?: string | null
         }

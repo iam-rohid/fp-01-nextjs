@@ -23,7 +23,7 @@ type FormData = yup.InferType<typeof schema>;
 export default function ForgotPasswordForm() {
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isSubmitting },
     handleSubmit,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -32,7 +32,10 @@ export default function ForgotPasswordForm() {
   const onSubmit = handleSubmit(async (values) => {
     console.log("Forgot Password Form Value", values);
     const { data, error } = await supabase.auth.resetPasswordForEmail(
-      values.email
+      values.email,
+      {
+        redirectTo: `${window.origin}/welcome`,
+      }
     );
 
     if (error) {
@@ -52,8 +55,7 @@ export default function ForgotPasswordForm() {
             Check your email to confirm
           </h3>
           <p className="text-emerald-500">
-            You&apos;ve successfully signed up. Please check your email to
-            confirm your account before signing in to the {APP_NAME} dashboard
+            An email has been sent with instructions to reset your password
           </p>
         </div>
       </div>
@@ -67,10 +69,11 @@ export default function ForgotPasswordForm() {
         placeholder="Your email address"
         label="Email *"
         {...register("email")}
+        autoFocus
         error={errors.email?.message}
       />
 
-      <Button fullWidth className="my-8">
+      <Button fullWidth className="my-8" loading={isSubmitting}>
         Send Email
       </Button>
     </form>

@@ -2,7 +2,6 @@
 
 import {
   MdAutoAwesome,
-  MdDashboard,
   MdExpandMore,
   MdHome,
   MdLogout,
@@ -11,7 +10,6 @@ import {
 } from "react-icons/md";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import supabase from "@/libs/supabase";
 
@@ -22,17 +20,13 @@ export default function HeaderUserButton({
   label: string;
   avatarUrl?: string;
 }) {
-  const router = useRouter();
-
   const handleSignOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
-      console.log("Sign out success");
-      router.refresh();
     } catch (e) {
       console.error("Failed to sign out", e);
     }
-  }, [router]);
+  }, []);
 
   return (
     <DropdownMenu.Root>
