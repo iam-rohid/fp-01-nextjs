@@ -32,7 +32,6 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
       email,
     },
   });
-  const router = useRouter();
 
   const onSubmit = handleSubmit(async ({ email }) => {
     const { error } = await supabase.auth.signInWithOtp({

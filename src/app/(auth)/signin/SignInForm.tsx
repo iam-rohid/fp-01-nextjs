@@ -39,7 +39,7 @@ export default function SignInForm({ email }: { email?: string }) {
   });
   const router = useRouter();
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
