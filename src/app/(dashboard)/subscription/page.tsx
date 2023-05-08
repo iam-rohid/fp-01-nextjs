@@ -1,9 +1,10 @@
 import PricingPlansGroup from "@/components/PricingPlansGroup";
 import AppBar from "../AppBar";
 import Button from "@/components/Button";
+import { APP_NAME } from "@/utils/constant";
 
 export const metadata = {
-  title: "Subscription",
+  title: `Subscription - ${APP_NAME}`,
 };
 
 export default function Subscription() {

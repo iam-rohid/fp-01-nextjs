@@ -2,9 +2,10 @@ import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-next
 import { cookies, headers } from "next/headers";
 import { Database } from "@/types/database";
 import RenderMap from "./RenderMap";
+import { APP_NAME } from "@/utils/constant";
 
 export const metadata = {
-  title: "Seller Map",
+  title: `Seller Map - ${APP_NAME}`,
 };
 
 const fetchData = async () => {

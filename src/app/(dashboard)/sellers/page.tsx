@@ -1,7 +1,8 @@
+import { APP_NAME } from "@/utils/constant";
 import AppBar from "../AppBar";
 
 export const metadata = {
-  title: "Sellers",
+  title: `Sellers - ${APP_NAME}`,
 };
 
 export default function Sellers() {
