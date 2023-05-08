@@ -116,21 +116,6 @@ const fuzzyFilter: FilterFn<Seller> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
-  let dir = 0;
-
-  // Only sort by rank if the column has ranking information
-  if (rowA.columnFiltersMeta[columnId]) {
-    dir = compareItems(
-      rowA.columnFiltersMeta[columnId]?.itemRank!,
-      rowB.columnFiltersMeta[columnId]?.itemRank!
-    );
-  }
-
-  // Provide an alphanumeric fallback for when the item ranks are equal
-  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
-};
-
 export default function SellerTable({ sellers }: { sellers: Seller[] }) {
   const [data, setData] = useState([...sellers]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -196,6 +181,7 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
             className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
+            title="Go to first page"
           >
             <MdFirstPage />
           </button>
@@ -203,6 +189,7 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
             className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            title="Go to preious page"
           >
             <MdKeyboardArrowLeft />
           </button>
@@ -220,6 +207,7 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
             className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            title="Go to next page"
           >
             <MdKeyboardArrowRight />
           </button>
@@ -227,6 +215,7 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
             className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
+            title="Go to last page"
           >
             <MdLastPage />
           </button>
@@ -238,7 +227,7 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
           className="h-full w-full border-collapse"
           style={{ width: table.getCenterTotalSize() }}
         >
-          <thead className="sticky top-0 z-20 [&_.resizer]:hover:opacity-100">
+          <thead className="sticky top-0 z-20 [&_.resizer]:hover:opacity-100 [&_th]:hover:border-r">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="flex w-fit">
                 <th className="sticky left-0 z-10 w-10 border-b border-slate-200 bg-slate-100"></th>
@@ -264,19 +253,24 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
                           )}
                     </p>
                     {{
-                      asc: <MdArrowUpward className="text-xl text-slate-600" />,
+                      asc: (
+                        <MdArrowUpward
+                          title="Ascending"
+                          className="text-xl text-slate-600"
+                        />
+                      ),
                       desc: (
-                        <MdArrowDownward className="text-xl text-slate-600" />
+                        <MdArrowDownward
+                          title="Descending"
+                          className="text-xl text-slate-600"
+                        />
                       ),
                     }[header.column.getIsSorted() as string] ?? null}
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={clsx(
-                        "resizer absolute -right-px top-0 h-full w-[2px] cursor-col-resize touch-none select-none opacity-0",
-                        header.column.getIsResizing()
-                          ? "bg-primary-500"
-                          : "bg-slate-200"
+                        "resizer absolute -right-px top-0 h-full w-2 cursor-col-resize touch-none select-none opacity-0"
                       )}
                     />
                   </th>
@@ -290,7 +284,10 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
                 <td className="sticky left-0 z-10 w-10 border-b border-slate-200 bg-white">
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger asChild>
-                      <button className="flex h-full w-full items-center justify-center text-xl text-slate-400 hover:text-slate-900">
+                      <button
+                        title="Menu"
+                        className="flex h-full w-full items-center justify-center text-xl text-slate-400 hover:text-slate-900"
+                      >
                         <MdMoreVert />
                       </button>
                     </DropdownMenu.Trigger>
