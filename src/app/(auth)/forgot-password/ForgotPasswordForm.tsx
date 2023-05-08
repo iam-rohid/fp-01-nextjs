@@ -5,7 +5,7 @@ import TextField from "@/components/TextField";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import { MdCheck } from "react-icons/md";
 
 const schema = yup
@@ -30,7 +30,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmit = handleSubmit(async (values) => {
     console.log("Forgot Password Form Value", values);
-    const { data, error } = await supabase.auth.resetPasswordForEmail(
+    const { data, error } = await supabaseClient.auth.resetPasswordForEmail(
       values.email,
       {
         redirectTo: `${window.origin}/welcome`,

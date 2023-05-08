@@ -1,17 +1,10 @@
 import { PropsWithChildren } from "react";
 import Sidebar from "./Sidebar";
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { headers, cookies } from "next/headers";
-import { Database } from "@/types/database";
 import { redirect } from "next/navigation";
+import serverSupabase from "@/libs/serverSupabase";
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
-  const supabase = createServerComponentSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-
-  const { data } = await supabase.auth.getUser();
+  const { data } = await serverSupabase().auth.getUser();
 
   if (!data.user) {
     redirect("/signin");

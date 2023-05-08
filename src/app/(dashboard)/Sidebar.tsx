@@ -25,7 +25,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileAsync } from "@/service/profile";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import { User } from "@supabase/supabase-js";
 
 export default function SideBar({ user }: { user: User }) {
@@ -96,7 +96,7 @@ const UserDropdownContent = forwardRef<
 >((props, ref) => {
   const handleSignOut = useCallback(async () => {
     try {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
     } catch (e) {
       console.error("Failed to sign out", e);
     }

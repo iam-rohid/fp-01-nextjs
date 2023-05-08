@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
 
@@ -45,7 +45,7 @@ export default function SignUpForm({ email }: { email?: string }) {
     async ({ email, password, first_name, last_name }) => {
       const emailRedirectTo = `${window.origin}/welcome`;
       console.log({ emailRedirectTo });
-      const { error } = await supabase.auth.signUp({
+      const { error } = await supabaseClient.auth.signUp({
         email,
         password,
         options: {

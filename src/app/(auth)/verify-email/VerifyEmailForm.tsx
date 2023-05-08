@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +34,7 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
   });
 
   const onSubmit = handleSubmit(async ({ email }) => {
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabaseClient.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: `${window.origin}/welcome`,

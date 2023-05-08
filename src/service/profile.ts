@@ -1,7 +1,7 @@
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 
 export const fetchProfileAsync = async (id: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("profiles")
     .select("*")
     .eq("id", id)

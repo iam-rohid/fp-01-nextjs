@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
 
@@ -33,7 +33,7 @@ export default function EmailCheckForm() {
 
   const onSubmit = handleSubmit(async (fields) => {
     console.log(fields);
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("profiles")
       .select("id")
       .eq("email", fields.email)

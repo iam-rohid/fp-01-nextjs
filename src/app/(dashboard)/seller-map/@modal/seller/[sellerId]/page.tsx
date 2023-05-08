@@ -1,17 +1,15 @@
-import { Database } from "@/types/database";
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { cookies, headers } from "next/headers";
+import serverSupabase from "@/libs/serverSupabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 import { MdOpenInNew } from "react-icons/md";
 
 const fetchSeller = async (sellerId: string) => {
-  const supabase = createServerComponentSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-  return supabase.from("sellers").select("*").eq("id", sellerId).single();
+  return serverSupabase()
+    .from("sellers")
+    .select("*")
+    .eq("id", sellerId)
+    .single();
 };
 
 export async function generateMetadata({

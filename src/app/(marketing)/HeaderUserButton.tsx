@@ -11,7 +11,7 @@ import {
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import { useCallback } from "react";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 
 export default function HeaderUserButton({
   label,
@@ -22,7 +22,7 @@ export default function HeaderUserButton({
 }) {
   const handleSignOut = useCallback(async () => {
     try {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
     } catch (e) {
       console.error("Failed to sign out", e);
     }

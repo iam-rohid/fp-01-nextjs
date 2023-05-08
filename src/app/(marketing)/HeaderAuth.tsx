@@ -1,22 +1,15 @@
-import { Database } from "@/types/database";
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { headers, cookies } from "next/headers";
 import Link from "next/link";
 import React from "react";
 import HeaderUserButton from "./HeaderUserButton";
+import serverSupabase from "@/libs/serverSupabase";
 
 export default async function HeaderAuth() {
-  const supabase = createServerComponentSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await serverSupabase().auth.getUser();
 
   if (user) {
-    const { data: profile } = await supabase
+    const { data: profile } = await serverSupabase()
       .from("profiles")
       .select("*")
       .eq("id", user?.id)

@@ -1,6 +1,6 @@
 "use client";
 
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import CircularProgress from "./CircularProgress";
 import { ReactNode } from "react";
@@ -10,7 +10,7 @@ import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
 
 const fetchSeller = async (sellerId: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("sellers")
     .select("*")
     .eq("id", sellerId)

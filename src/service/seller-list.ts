@@ -1,7 +1,7 @@
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 
 export const fetchSellerList = async () => {
-  const { data, error } = await supabase.from("sellers").select("*");
+  const { data, error } = await supabaseClient.from("sellers").select("*");
   if (error) {
     throw error;
   }

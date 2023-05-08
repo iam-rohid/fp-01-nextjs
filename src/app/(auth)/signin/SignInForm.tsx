@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorBox from "@/components/ErrorBox";
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import { useRouter } from "next/navigation";
 
 const schema = yup
@@ -39,7 +39,7 @@ export default function SignInForm({ email }: { email?: string }) {
   });
   const router = useRouter();
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });

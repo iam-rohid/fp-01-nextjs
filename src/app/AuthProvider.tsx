@@ -1,6 +1,6 @@
 "use client";
 
-import supabase from "@/libs/supabase";
+import supabaseClient from "@/libs/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import {
@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabaseClient.auth.onAuthStateChange((event, session) => {
       setUser(session?.user || null);
       setIsLoading(false);
       router.refresh();
