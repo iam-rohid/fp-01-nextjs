@@ -27,7 +27,7 @@ const Tab = ({
           "flex h-full items-center px-4",
           selectedTab === value
             ? "text-primary-500"
-            : "hover:bg-slate-100 hover:text-slate-900",
+            : "text-slate-600 hover:text-slate-900",
           {
             "pr-12": !!onClose,
           }
@@ -41,7 +41,7 @@ const Tab = ({
       {onClose && (
         <button
           onClick={() => onClose(value)}
-          className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xl hover:bg-slate-100 hover:text-slate-900"
+          className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900"
         >
           <MdClose />
         </button>

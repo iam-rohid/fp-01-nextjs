@@ -1,4 +1,4 @@
-import RenderMap from "./RenderMap";
+import SellerMapTabs from "./SellerMapTabs";
 import { APP_NAME } from "@/utils/constant";
 import serverSupabase from "@/libs/serverSupabase";
 
@@ -6,7 +6,11 @@ export const metadata = {
   title: `Seller Map - ${APP_NAME}`,
 };
 
-export default async function SellerMapPage() {
+export default async function SellerMapPage({
+  searchParams: { tabId, tabLabel },
+}: {
+  searchParams: { tabId?: string; tabLabel?: string };
+}) {
   const { data } = await serverSupabase()
     .from("sellers")
     .select("id,estimate_sales,latitude,longitude,name");
@@ -19,5 +23,5 @@ export default async function SellerMapPage() {
     name: seller.name || "Unknown",
   }));
 
-  return <RenderMap sellers={sellers} />;
+  return <SellerMapTabs sellers={sellers} tabId={tabId} tabLabel={tabLabel} />;
 }
