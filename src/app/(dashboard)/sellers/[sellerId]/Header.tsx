@@ -6,6 +6,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 
 export default function Header({ title }: { title: string }) {
   const router = useRouter();
+
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center gap-4 bg-white px-4 ring-1 ring-slate-200">
       <button

@@ -1,15 +1,10 @@
 "use client";
 
 import { Database } from "@/types/database";
-import {
-  RankingInfo,
-  compareItems,
-  rankItem,
-} from "@tanstack/match-sorter-utils";
+import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import {
   ColumnFiltersState,
   FilterFn,
-  SortingFn,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -19,7 +14,6 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
@@ -29,7 +23,6 @@ import {
   MdArrowUpward,
   MdFilterList,
   MdFirstPage,
-  MdGrid3X3,
   MdGridView,
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
