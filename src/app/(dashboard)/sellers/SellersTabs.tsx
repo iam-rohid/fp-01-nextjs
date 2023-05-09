@@ -15,11 +15,9 @@ type TabProps = { id: string; label?: string };
 const SELLERS_TAB_ID = "sellers";
 
 export default function SellersTabs({
-  sellers,
   tabId: initTabId,
   tabLabel,
 }: {
-  sellers: Seller[];
   tabId?: string;
   tabLabel?: string;
 }) {
@@ -96,7 +94,6 @@ export default function SellersTabs({
 
       <div className="relative flex-1 overflow-hidden">
         <SellerTable
-          sellers={sellers}
           onItemClick={(seller) =>
             onItemClick({
               id: seller.id.toString(),

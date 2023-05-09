@@ -1,5 +1,4 @@
 import { APP_NAME } from "@/utils/constant";
-import serverSupabase from "@/libs/serverSupabase";
 import SellersTabs from "./SellersTabs";
 
 export const metadata = {
@@ -11,10 +10,5 @@ export default async function Sellers({
 }: {
   searchParams: { tabId?: string; tabLabel?: string };
 }) {
-  // const { data } = await serverSupabase()
-  //   .from("sellers")
-  //   .select("*")
-  //   .throwOnError();
-
-  return <SellersTabs sellers={[]} tabId={tabId} tabLabel={tabLabel} />;
+  return <SellersTabs tabId={tabId} tabLabel={tabLabel} />;
 }
