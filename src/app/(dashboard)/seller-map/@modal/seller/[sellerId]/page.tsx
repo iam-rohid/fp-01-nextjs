@@ -52,7 +52,7 @@ export default async function Seller({
   }
 
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <aside className="absolute bottom-0 right-0 top-0 z-10 flex w-[512px] max-w-[100vw] flex-col overflow-hidden overflow-y-auto border-l border-slate-200 bg-white">
       <Header title={seller.name || "Unknown Seller"} />
 
       <div className="grid grid-cols-12 gap-4 p-4">
@@ -106,7 +106,7 @@ export default async function Seller({
           </div>
         </Card>
       </div>
-    </div>
+    </aside>
   );
 }
 
