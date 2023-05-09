@@ -4,10 +4,6 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
@@ -33,7 +29,7 @@ import Link from "next/link";
 import { Seller } from "@/types/sellers";
 import copyToClipboard from "@/utils/copyToClipboard";
 import { v4 as uuidV4 } from "uuid";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import supabaseClient from "@/libs/supabaseClient";
 import CircularProgress from "@/components/CircularProgress";
 import { FilterOperator } from "@/types/FilterOperator";
@@ -62,9 +58,12 @@ const fuzzyFilter: FilterFn<Seller> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-const fetchSellers = async (filters: Filter[], orders: Sort[]) => {
-  console.log(filters, orders);
-  const list = supabaseClient.from("sellers").select("*");
+const fetchSellers = async (
+  pageParam: number,
+  filters: Filter[],
+  orders: Sort[]
+) => {
+  const list = supabaseClient.from("sellers").select("*", { count: "exact" });
   orders.forEach((item) =>
     list.order(item.columnName, { ascending: item.ascending })
   );
@@ -72,11 +71,14 @@ const fetchSellers = async (filters: Filter[], orders: Sort[]) => {
     if (filter.query.trim() !== "")
       list.filter(filter.columnName, filter.operator, filter.query);
   });
-  const { data, error } = await list.limit(30);
+  const pageLimit = 30;
+  const from = pageParam * pageLimit;
+  const to = from + pageLimit - 1;
+  const { data, error, count } = await list.range(from, to);
   if (error) {
     throw error;
   }
-  return data;
+  return { data, count };
 };
 
 const COLUMN_NAME_TO_LABEL: Record<ColumnName, string> = {
@@ -90,17 +92,24 @@ const COLUMN_NAME_TO_LABEL: Record<ColumnName, string> = {
 };
 
 export default function SellerTable({
-  sellers,
   onItemClick,
 }: {
-  sellers: Seller[];
   onItemClick: (seller: Seller) => void;
 }) {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [orders, setOrders] = useState<Sort[]>([]);
   const [columnNames, setColumnNames] = useState<ColumnName[]>(COLUMN_NAMES);
 
-  const { data, isLoading, isRefetching, isError, error, refetch } = useQuery(
+  const {
+    data,
+    isLoading,
+    isRefetching,
+    isError,
+    error,
+    refetch,
+    fetchNextPage,
+    isFetching,
+  } = useInfiniteQuery(
     [
       "sellers",
       filters
@@ -116,11 +125,18 @@ export default function SellerTable({
         )
         .join("--"),
     ],
-    () => fetchSellers(filters, orders),
+    ({ pageParam = 0 }) => fetchSellers(pageParam, filters, orders),
     {
       refetchOnWindowFocus: false,
       refetchInterval: false,
+      getNextPageParam: (_lastPage, allPage) => allPage.length,
+      keepPreviousData: true,
     }
+  );
+
+  const sellers = useMemo(
+    () => data?.pages.flatMap((page) => page.data) || [],
+    [data?.pages]
   );
 
   return (
@@ -148,54 +164,6 @@ export default function SellerTable({
             <span className="max-md:hidden">Refresh</span>
           </button>
         </div>
-
-        {/* <div className="flex items-center">
-          <button
-            className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-            title="Go to first page"
-          >
-            <MdFirstPage />
-          </button>
-          <button
-            className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-            title="Go to preious page"
-          >
-            <MdKeyboardArrowLeft />
-          </button>
-          <p className="mx-1 flex items-center gap-1 text-slate-600 max-md:hidden">
-            <span>Page</span>
-            <span className="font-medium text-slate-900">
-              {table.getState().pagination.pageIndex + 1}
-            </span>
-            of{" "}
-            <span className="font-medium text-slate-900">
-              {table.getPageCount()}
-            </span>
-          </p>
-          <p className="md:hidden">
-            {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
-          </p>
-          <button
-            className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-            title="Go to next page"
-          >
-            <MdKeyboardArrowRight />
-          </button>
-          <button
-            className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-            title="Go to last page"
-          >
-            <MdLastPage />
-          </button>
-        </div> */}
       </header>
 
       {isLoading ? (
@@ -206,9 +174,12 @@ export default function SellerTable({
         <p>Something went wrong!</p>
       ) : (
         <TableComponent
-          data={data}
+          data={sellers}
           onItemClick={onItemClick}
           columnNames={columnNames}
+          fetchNextPage={() => fetchNextPage()}
+          isFetching={isFetching}
+          totalRows={data.pages[0].count || 0}
         />
       )}
     </div>
@@ -219,11 +190,19 @@ const TableComponent = ({
   data,
   onItemClick,
   columnNames,
+  fetchNextPage,
+  isFetching,
+  totalRows,
 }: {
   data: Seller[];
   onItemClick: (seller: Seller) => void;
   columnNames: ColumnName[];
+  fetchNextPage: () => void;
+  isFetching: boolean;
+  totalRows: number;
 }) => {
+  const totalFetched = useMemo(() => data.length, [data.length]);
+
   const columns = useMemo(
     () => [
       ...[...columnNames]
@@ -277,20 +256,30 @@ const TableComponent = ({
     filterFns: {
       fuzzy: fuzzyFilter,
     },
-    initialState: {
-      pagination: {
-        pageSize: 30,
-      },
-    },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
+  const fetchMoreOnBottomReached = useCallback(
+    (containerRefElement?: HTMLDivElement | null) => {
+      if (containerRefElement) {
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        if (
+          scrollHeight - scrollTop - clientHeight < 300 &&
+          !isFetching &&
+          totalFetched < totalRows
+        ) {
+          fetchNextPage();
+        }
+      }
+    },
+    [isFetching, totalFetched, totalRows, fetchNextPage]
+  );
+
   return (
-    <div className="relative flex-1 overflow-auto">
+    <div
+      className="relative flex-1 overflow-auto"
+      onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+    >
       <table
         className="h-full w-full border-collapse"
         style={{ width: table.getCenterTotalSize() }}
