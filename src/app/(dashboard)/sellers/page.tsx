@@ -11,10 +11,10 @@ export default async function Sellers({
 }: {
   searchParams: { tabId?: string; tabLabel?: string };
 }) {
-  const { data } = await serverSupabase()
-    .from("sellers")
-    .select("*")
-    .throwOnError();
+  // const { data } = await serverSupabase()
+  //   .from("sellers")
+  //   .select("*")
+  //   .throwOnError();
 
-  return <SellersTabs sellers={data || []} tabId={tabId} tabLabel={tabLabel} />;
+  return <SellersTabs sellers={[]} tabId={tabId} tabLabel={tabLabel} />;
 }
