@@ -1,4 +1,3 @@
-import { Database } from "@/types/database";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import {
   ColumnFiltersState,
@@ -19,6 +18,7 @@ import { useState } from "react";
 import {
   MdArrowDownward,
   MdArrowUpward,
+  MdContentCopy,
   MdFilterList,
   MdFirstPage,
   MdGridView,
@@ -29,10 +29,15 @@ import {
   MdOpenInNew,
   MdOutlineViewColumn,
   MdSearch,
+  MdSort,
   MdStore,
 } from "react-icons/md";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import * as ContextMenu from "@radix-ui/react-context-menu";
+
 import Link from "next/link";
+import { Seller } from "@/types/sellers";
+import copyToClipboard from "@/utils/copyToClipboard";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -43,7 +48,6 @@ declare module "@tanstack/table-core" {
   }
 }
 
-type Seller = Database["public"]["Tables"]["sellers"]["Row"];
 const columnHelper = createColumnHelper<Seller>();
 
 const columns = [
@@ -148,12 +152,12 @@ export default function SellerTable({
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-white">
-      <header className="flex h-14 items-center gap-4 border-b border-slate-200 px-4">
+      <header className="flex items-center gap-4 overflow-x-auto border-b border-slate-200 px-4 py-2">
         <div className="flex flex-1 items-center gap-2">
           <div className="relative max-w-sm flex-1">
             <input
               type="text"
-              className="h-10 w-full rounded-lg border border-slate-200 pl-10 pr-4 hover:border-slate-300"
+              className="h-10 w-full min-w-[200px] rounded-lg border border-slate-200 pl-10 pr-4 hover:border-slate-300"
               placeholder="Search all columns..."
               value={globalFilter}
               onChange={(e) => setGlobalFilter(e.currentTarget.value)}
@@ -161,13 +165,17 @@ export default function SellerTable({
             <MdSearch className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-2xl text-slate-400" />
           </div>
 
-          <button className="flex h-10 items-center rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-            <MdFilterList className="-ml-1 mr-2 text-2xl" />
-            Filters
+          <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
+            <MdFilterList className="text-2xl md:-ml-1" />
+            <span className="max-md:hidden">Filters</span>
           </button>
-          <button className="flex h-10 items-center rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-            <MdOutlineViewColumn className="-ml-1 mr-2 text-2xl" />
-            Columns
+          <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
+            <MdSort className="text-2xl md:-ml-1" />
+            <span className="max-md:hidden">Sort</span>
+          </button>
+          <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
+            <MdOutlineViewColumn className="text-2xl md:-ml-1" />
+            <span className="max-md:hidden">Columns</span>
           </button>
         </div>
 
@@ -188,7 +196,7 @@ export default function SellerTable({
           >
             <MdKeyboardArrowLeft />
           </button>
-          <p className="mx-1 flex items-center gap-1 text-slate-600">
+          <p className="mx-1 flex items-center gap-1 text-slate-600 max-md:hidden">
             <div>Page</div>
             <span className="font-medium text-slate-900">
               {table.getState().pagination.pageIndex + 1}
@@ -197,6 +205,9 @@ export default function SellerTable({
             <span className="font-medium text-slate-900">
               {table.getPageCount()}
             </span>
+          </p>
+          <p className="md:hidden">
+            {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
           </p>
           <button
             className="flex h-8 w-8 items-center justify-center text-2xl text-slate-600 hover:text-slate-900 disabled:text-slate-400"
@@ -276,12 +287,12 @@ export default function SellerTable({
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-100">
-                <td className="sticky left-0 z-10 w-10 border-b border-r border-slate-200 bg-white">
+                <td className="sticky left-0 z-10 flex w-10 items-center justify-center border-b border-r border-slate-200 bg-white">
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger asChild>
                       <button
                         title="Menu"
-                        className="flex h-full w-full items-center justify-center text-xl text-slate-400 hover:text-slate-900"
+                        className="flex h-8 w-8 items-center justify-center rounded-md text-xl text-slate-400 hover:text-slate-900"
                       >
                         <MdMoreVert />
                       </button>
@@ -290,12 +301,12 @@ export default function SellerTable({
                       <DropdownMenu.Content
                         align="start"
                         side="bottom"
-                        className="z-50 rounded-lg bg-white p-1 shadow-xl ring-1 ring-slate-200"
+                        className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
                       >
                         <DropdownMenu.Item asChild>
                           <button
                             onClick={() => onItemClick(row.original)}
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
                           >
                             <MdGridView className="text-2xl" />
                             View Details
@@ -305,7 +316,7 @@ export default function SellerTable({
                           <Link
                             target="_blank"
                             href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
                           >
                             <MdStore className="text-2xl" />
                             View Storefront
@@ -317,23 +328,62 @@ export default function SellerTable({
                   </DropdownMenu.Root>
                 </td>
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={clsx(
-                      "flex items-center truncate border-b border-slate-200 bg-white p-2",
-                      cell.column.id === "name"
-                        ? "sticky left-10 z-10 border-r-2"
-                        : "border-r"
-                    )}
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    <p className="flex-1 truncate">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </p>
-                  </td>
+                  <ContextMenu.Root key={cell.id}>
+                    <ContextMenu.Trigger asChild>
+                      <td
+                        className={clsx(
+                          "flex items-center truncate border-b border-slate-200 bg-white p-2",
+                          cell.column.id === "name"
+                            ? "sticky left-10 z-10 border-r-2"
+                            : "border-r"
+                        )}
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        <p className="flex-1 truncate">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </p>
+                      </td>
+                    </ContextMenu.Trigger>
+                    <ContextMenu.Portal>
+                      <ContextMenu.Content className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200">
+                        <ContextMenu.Item asChild>
+                          <button
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            onClick={() =>
+                              copyToClipboard(cell.getValue()?.toString() || "")
+                            }
+                          >
+                            <MdContentCopy className="text-xl" />
+                            Copy
+                          </button>
+                        </ContextMenu.Item>
+                        <ContextMenu.Separator className="my-2 h-px bg-slate-200" />
+                        <ContextMenu.Item asChild>
+                          <button
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            onClick={() => onItemClick(row.original)}
+                          >
+                            <MdGridView className="text-xl" />
+                            View details
+                          </button>
+                        </ContextMenu.Item>
+                        <ContextMenu.Item asChild>
+                          <Link
+                            className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            target="_blank"
+                            href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
+                          >
+                            <MdStore className="text-xl" />
+                            <p className="flex-1">Storefront</p>
+                            <MdOpenInNew className="text-xl" />
+                          </Link>
+                        </ContextMenu.Item>
+                      </ContextMenu.Content>
+                    </ContextMenu.Portal>
+                  </ContextMenu.Root>
                 ))}
               </tr>
             ))}
