@@ -90,7 +90,18 @@ const COLUMN_NAME_TO_LABEL: Record<ColumnName, string> = {
   latitude: "Latitude",
   longitude: "Longitude",
 };
-
+const FILTER_OPERATOR_TO_LABEL: Record<FilterOperator, [string, string]> = {
+  eq: ["=", "equals"],
+  neq: ["<>", "not equal"],
+  gt: [">", "greater than"],
+  lt: ["<", "less than"],
+  gte: [">=", "greater than or equal"],
+  lte: ["<=", "less than or equal"],
+  like: ["~~", "like operator"],
+  ilike: ["~~", "ilike operator"],
+  in: ["in", "one of a list of value"],
+  is: ["is", "checking for (null, not null, true, false)"],
+};
 export default function SellerTable({
   onItemClick,
 }: {
@@ -157,7 +168,7 @@ export default function SellerTable({
           >
             <MdAutorenew
               className={clsx(
-                "text-2xl md:-ml-1",
+                "text-xl md:-ml-1",
                 isRefetching ? "animate-spin" : ""
               )}
             />
@@ -344,7 +355,7 @@ const TableComponent = ({
                           onClick={() => onItemClick(row.original)}
                           className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
                         >
-                          <MdGridView className="text-2xl" />
+                          <MdGridView className="text-xl" />
                           View Details
                         </button>
                       </DropdownMenu.Item>
@@ -354,7 +365,7 @@ const TableComponent = ({
                           href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
                           className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
                         >
-                          <MdStore className="text-2xl" />
+                          <MdStore className="text-xl" />
                           View Storefront
                           <MdOpenInNew className="ml-2 text-xl" />
                         </Link>
@@ -434,7 +445,7 @@ type Filter = {
   id: string;
   columnName: ColumnName;
   query: string;
-  operator: string;
+  operator: FilterOperator;
 };
 
 type Sort = {
@@ -453,20 +464,8 @@ const OPERATORS: FilterOperator[] = [
   "lte",
   "like",
   "ilike",
-  "is",
   "in",
-  "cs",
-  "cd",
-  "sl",
-  "sr",
-  "nxl",
-  "nxr",
-  "adj",
-  "ov",
-  "fts",
-  "plfts",
-  "phfts",
-  "wfts",
+  "is",
 ];
 
 const FilterButton = ({
@@ -500,7 +499,7 @@ const FilterButton = ({
     <Popover.Root onOpenChange={() => setFilters(value)}>
       <Popover.Trigger asChild>
         <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdFilterList className="text-2xl md:-ml-1" />
+          <MdFilterList className="text-xl md:-ml-1" />
           <span className="max-md:hidden">
             {value.length
               ? `Filtered by ${value.length} rule${value.length > 1 ? "s" : ""}`
@@ -517,52 +516,77 @@ const FilterButton = ({
             <div className="space-y-2 p-2">
               {filters.map((filter) => (
                 <div key={filter.id} className="flex items-center gap-2">
-                  <div className="relative flex-1">
-                    <select
-                      value={filter.columnName}
-                      onChange={(e) => {
-                        const value = e.currentTarget.value as ColumnName;
-                        setFilters((filters) =>
-                          filters.map((item) =>
-                            item.id === filter.id
-                              ? { ...item, columnName: value }
-                              : item
-                          )
-                        );
-                      }}
-                      className="flex h-10 w-full cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-6 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900"
-                    >
-                      {COLUMN_NAMES.map((item) => (
-                        <option key={item} value={item}>
-                          {COLUMN_NAME_TO_LABEL[item]}
-                        </option>
-                      ))}
-                    </select>
-                    <MdExpandMore className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xl" />
-                  </div>
-                  <div className="relative">
-                    <select
-                      value={filter.operator}
-                      onChange={(e) => {
-                        const value = e.currentTarget.value;
-                        setFilters((filters) =>
-                          filters.map((item) =>
-                            item.id === filter.id
-                              ? { ...item, operator: value }
-                              : item
-                          )
-                        );
-                      }}
-                      className="flex h-10 w-full cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-6 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900"
-                    >
-                      {OPERATORS.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                    <MdExpandMore className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xl" />
-                  </div>
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger className="flex h-10 flex-1 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
+                      <p className="flex-1">
+                        {COLUMN_NAME_TO_LABEL[filter.columnName]}
+                      </p>
+                      <MdExpandMore className="-mr-1 text-xl" />
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        align="start"
+                        className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
+                      >
+                        {COLUMN_NAMES.map((value) => (
+                          <DropdownMenu.Item key={value} asChild>
+                            <button
+                              onClick={() => {
+                                setFilters((filters) =>
+                                  filters.map((item) =>
+                                    item.id === filter.id
+                                      ? { ...item, columnName: value }
+                                      : item
+                                  )
+                                );
+                              }}
+                              className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            >
+                              {COLUMN_NAME_TO_LABEL[value]}
+                            </button>
+                          </DropdownMenu.Item>
+                        ))}
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
+
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger className="flex h-10 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
+                      <p className="flex-1">
+                        {FILTER_OPERATOR_TO_LABEL[filter.operator][0]}
+                      </p>
+                      <MdExpandMore className="-mr-1 text-xl" />
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        align="start"
+                        className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
+                      >
+                        {OPERATORS.map((value) => (
+                          <DropdownMenu.Item key={value} asChild>
+                            <button
+                              onClick={() => {
+                                setFilters((filters) =>
+                                  filters.map((item) =>
+                                    item.id === filter.id
+                                      ? { ...item, operator: value }
+                                      : item
+                                  )
+                                );
+                              }}
+                              className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
+                            >
+                              <span className="text-slate-400">
+                                [{FILTER_OPERATOR_TO_LABEL[value][0]}]
+                              </span>
+                              <span>{FILTER_OPERATOR_TO_LABEL[value][1]}</span>
+                            </button>
+                          </DropdownMenu.Item>
+                        ))}
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
+
                   <input
                     type="text"
                     value={filter.query}
@@ -661,7 +685,7 @@ const SortButton = ({
     <Popover.Root onOpenChange={() => setSorts(value)}>
       <Popover.Trigger asChild>
         <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdSort className="text-2xl md:-ml-1" />
+          <MdSort className="text-xl md:-ml-1" />
           <span className="max-md:hidden">
             {value.length
               ? `Sorted by ${value.length} rule${value.length > 1 ? "s" : ""}`
@@ -798,7 +822,7 @@ const ColumnsButton = ({
     <Popover.Root onOpenChange={() => setColumns(value)}>
       <Popover.Trigger asChild>
         <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdOutlineViewColumn className="text-2xl md:-ml-1" />
+          <MdOutlineViewColumn className="text-xl md:-ml-1" />
           <span className="max-md:hidden">Columns</span>
         </button>
       </Popover.Trigger>
