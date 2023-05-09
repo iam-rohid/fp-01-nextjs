@@ -1,17 +1,20 @@
 import { APP_NAME } from "@/utils/constant";
-import AppBar from "../AppBar";
 import serverSupabase from "@/libs/serverSupabase";
-import SellerTable from "./SellerTable";
+import SellersTabs from "./SellersTabs";
 
 export const metadata = {
   title: `Sellers - ${APP_NAME}`,
 };
 
-export default async function Sellers() {
+export default async function Sellers({
+  searchParams: { tabId, tabLabel },
+}: {
+  searchParams: { tabId?: string; tabLabel?: string };
+}) {
   const { data } = await serverSupabase()
     .from("sellers")
     .select("*")
     .throwOnError();
 
-  return <SellerTable sellers={data || []} />;
+  return <SellersTabs sellers={data || []} tabId={tabId} tabLabel={tabLabel} />;
 }

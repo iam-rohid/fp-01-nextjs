@@ -4,12 +4,54 @@ import clsx from "clsx";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
 import { Database } from "@/types/database";
+import CircularProgress from "./CircularProgress";
+import supabaseClient from "@/libs/supabaseClient";
+import { useQuery } from "@tanstack/react-query";
 
-export default function SellerDetails({
-  seller,
-}: {
-  seller: Database["public"]["Tables"]["sellers"]["Row"];
-}) {
+const fetchSeller = async (sellerId: string) => {
+  const { data, error } = await supabaseClient
+    .from("sellers")
+    .select("*")
+    .eq("id", sellerId)
+    .single();
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw "Seller not found!";
+  }
+
+  return data;
+};
+
+export default function SellerDetails({ sellerId }: { sellerId: string }) {
+  const {
+    data: seller,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(["seller", sellerId], ({ queryKey }) =>
+    fetchSeller(queryKey[1])
+  );
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto my-16 w-fit">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <p>Something went wrong!</p>
+        <pre>{JSON.stringify(error, null, 2)}</pre>
+      </div>
+    );
+  }
+
   return (
     <main className="mx-auto max-w-screen-2xl p-4">
       <div className="grid grid-cols-12 gap-4 md:gap-8">

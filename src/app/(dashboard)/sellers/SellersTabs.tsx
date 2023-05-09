@@ -1,21 +1,20 @@
 "use client";
 
-import { type Seller } from "@/components/SellerMap";
+import { Database } from "@/types/database";
+import SellerTable from "./SellerTable";
 import Tab from "@/components/Tab";
-import dynamic from "next/dynamic";
+import { MdStore } from "react-icons/md";
+import { useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { ReactNode, useCallback, useState } from "react";
-import { MdMap, MdStore } from "react-icons/md";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
 
-const SellerMap = dynamic(() => import("@/components/SellerMap/SellerMap"), {
-  ssr: false,
-});
-
+type Seller = Database["public"]["Tables"]["sellers"]["Row"];
 type TabProps = { id: string; label?: string };
 
-export default function SellerMapTabs({
+const SELLERS_TAB_ID = "sellers";
+
+export default function SellersTabs({
   sellers,
   tabId: initTabId,
   tabLabel,
@@ -27,7 +26,7 @@ export default function SellerMapTabs({
   const [selectedSellers, setSelectedSellers] = useState<TabProps[]>([
     ...(initTabId ? [{ id: initTabId, label: tabLabel }] : []),
   ]);
-  const [tabId, setTabId] = useState(initTabId || "map");
+  const [tabId, setTabId] = useState(initTabId || SELLERS_TAB_ID);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -53,15 +52,15 @@ export default function SellerMapTabs({
   );
 
   const onMapTabClick = useCallback(() => {
-    setTabId("map");
-    router.push("/seller-map");
+    setTabId(SELLERS_TAB_ID);
+    router.push("/sellers");
   }, [router]);
 
   const onTabClose = useCallback(
     (sellerId: string) => {
       if (tabId === sellerId) {
-        setTabId("map");
-        router.push("/seller-map");
+        setTabId(SELLERS_TAB_ID);
+        router.push("/sellers");
       }
       setSelectedSellers((sellers) =>
         sellers.filter((seller) => seller.id.toString() !== sellerId)
@@ -71,14 +70,14 @@ export default function SellerMapTabs({
   );
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="h-14 overflow-x-auto overflow-y-hidden border-b border-slate-200 bg-white">
         <div className="flex h-full">
           <Tab
             onClick={() => onMapTabClick()}
-            value="map"
-            label="Seller Map"
-            icon={<MdMap />}
+            value={SELLERS_TAB_ID}
+            label="Sellers"
+            icon={<MdStore />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
@@ -94,13 +93,14 @@ export default function SellerMapTabs({
           ))}
         </div>
       </div>
-      <div className="relative flex-1">
-        <SellerMap
+
+      <div className="relative flex-1 overflow-hidden">
+        <SellerTable
           sellers={sellers}
           onItemClick={(seller) =>
             onItemClick({
               id: seller.id.toString(),
-              label: seller.name,
+              label: seller.name || undefined,
             })
           }
         />

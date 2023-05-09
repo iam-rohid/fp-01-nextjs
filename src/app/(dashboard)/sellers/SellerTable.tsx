@@ -1,5 +1,3 @@
-"use client";
-
 import { Database } from "@/types/database";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import {
@@ -109,7 +107,13 @@ const fuzzyFilter: FilterFn<Seller> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-export default function SellerTable({ sellers }: { sellers: Seller[] }) {
+export default function SellerTable({
+  sellers,
+  onItemClick,
+}: {
+  sellers: Seller[];
+  onItemClick: (seller: Seller) => void;
+}) {
   const [data, setData] = useState([...sellers]);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -145,8 +149,6 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-white">
       <header className="flex h-14 items-center gap-4 border-b border-slate-200 px-4">
-        <h1 className="text-xl font-semibold">Sellers</h1>
-
         <div className="flex flex-1 items-center gap-2">
           <div className="relative max-w-sm flex-1">
             <input
@@ -223,15 +225,15 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
           <thead className="sticky top-0 z-20 [&_.resizer]:hover:opacity-100 [&_th]:hover:border-r">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="flex w-fit">
-                <th className="sticky left-0 z-10 w-10 border-b border-slate-200 bg-slate-100"></th>
+                <th className="sticky left-0 z-10 w-10 border-b border-r border-slate-200 bg-slate-100"></th>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     className={clsx(
                       "relative flex cursor-pointer items-center gap-2 truncate border-b border-slate-200 bg-slate-100 p-2 font-semibold",
-                      {
-                        "sticky left-10 z-10 border-r": header.id === "name",
-                      }
+                      header.id === "name"
+                        ? "sticky left-10 z-10 border-r-2"
+                        : "border-r"
                     )}
                     colSpan={header.colSpan}
                     style={{ width: header.getSize() }}
@@ -273,8 +275,8 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-50">
-                <td className="sticky left-0 z-10 w-10 border-b border-slate-200 bg-white">
+              <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-100">
+                <td className="sticky left-0 z-10 w-10 border-b border-r border-slate-200 bg-white">
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger asChild>
                       <button
@@ -291,13 +293,13 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
                         className="z-50 rounded-lg bg-white p-1 shadow-xl ring-1 ring-slate-200"
                       >
                         <DropdownMenu.Item asChild>
-                          <Link
-                            href={`/sellers/${row.original.id}`}
+                          <button
+                            onClick={() => onItemClick(row.original)}
                             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
                           >
                             <MdGridView className="text-2xl" />
                             View Details
-                          </Link>
+                          </button>
                         </DropdownMenu.Item>
                         <DropdownMenu.Item asChild>
                           <Link
@@ -319,10 +321,9 @@ export default function SellerTable({ sellers }: { sellers: Seller[] }) {
                     key={cell.id}
                     className={clsx(
                       "flex items-center truncate border-b border-slate-200 bg-white p-2",
-                      {
-                        "sticky left-10 z-10 border-r":
-                          cell.column.id === "name",
-                      }
+                      cell.column.id === "name"
+                        ? "sticky left-10 z-10 border-r-2"
+                        : "border-r"
                     )}
                     style={{ width: cell.column.getSize() }}
                   >
