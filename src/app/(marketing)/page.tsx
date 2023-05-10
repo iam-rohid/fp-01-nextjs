@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
 import serverSupabase from "@/libs/serverSupabase";
 import { APP_NAME } from "@/utils/constant";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
-import { MdArrowForward } from "react-icons/md";
 
 export const metadata: Metadata = {
   title: APP_NAME,
@@ -20,24 +20,22 @@ export default async function HomePage() {
   }
 
   return (
-    <main>
+    <main className="container relative pb-10">
       <section>
-        <div className="mx-auto flex h-full max-w-screen-xl flex-col items-center px-6 py-24 text-center">
-          <h1 className="max-w-5xl text-7xl font-bold text-slate-900">
+        <div className="grid gap-4 pt-16">
+          <h1 className="max-w-[750px] text-3xl font-bold leading-tight tracking-tighter md:block md:text-5xl lg:text-6xl lg:leading-[1.1]">
             Lorem ipsum dolor sit amet consectetur adipisicing
           </h1>
-          <p className="mt-8 max-w-3xl text-2xl text-slate-600">
+          <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nulla,
             perspiciatis reprehenderit architecto vero velit laborum aperiam
             officia cum ea distinctio.
           </p>
-          <Link
-            href="/signup"
-            className="mt-14 flex h-16 w-fit items-center rounded-full bg-primary-500 px-12 text-xl text-white transition-shadow hover:shadow-xl hover:shadow-primary-700/20"
-          >
-            Get Started
-            <MdArrowForward className="-m-1 ml-2 text-2xl" />
-          </Link>
+          <div className="pb-16 pt-8">
+            <Button asChild size="lg">
+              <Link href="/signup">Get Started</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </main>

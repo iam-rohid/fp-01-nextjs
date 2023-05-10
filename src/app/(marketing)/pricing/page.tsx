@@ -9,11 +9,13 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   return (
-    <main className="mx-auto my-16 max-w-screen-xl space-y-16 px-6">
-      <section id="plans">
-        <h1 className="mx-auto my-16 max-w-3xl text-center text-6xl font-bold text-slate-800">
-          Choose the plan that fits your needs.
-        </h1>
+    <main className="container relative pb-10">
+      <section>
+        <div className="py-10">
+          <h1 className="mx-auto max-w-[750px] text-center text-3xl font-bold leading-tight tracking-tighter md:block md:text-5xl lg:text-6xl lg:leading-[1.1]">
+            Choose the plan that fits your needs.
+          </h1>
+        </div>
         <PricingPlansGroup />
       </section>
     </main>
