@@ -9,11 +9,11 @@ export default function VerifyEmail({
 }) {
   return (
     <div className="mx-auto w-full max-w-md space-y-8 px-6">
-      <div>
-        <h3 className="mb-2 text-3xl font-semibold text-slate-800">
+      <div className="felx flex-col space-y-2 text-center">
+        <h3 className="text-2xl font-semibold tracking-tight">
           Verify your email
         </h3>
-        <p className="text-slate-600">
+        <p className="text-sm text-muted-foreground">
           You&apos;ve successfully signed up. Please check your email to confirm
           your account before signing in to the {APP_NAME} dashboard
         </p>

@@ -1,12 +1,14 @@
 "use client";
 
-import Button from "@/components/Button";
-import TextField from "@/components/TextField";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import supabaseClient from "@/libs/supabaseClient";
-import { MdCheck } from "react-icons/md";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, CheckCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const schema = yup
   .object({
@@ -45,35 +47,44 @@ export default function ForgotPasswordForm() {
 
   if (isSubmitSuccessful) {
     return (
-      <div className="flex gap-4 bg-emerald-50 p-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500">
-          <MdCheck className="text-2xl text-white" />
-        </div>
-        <div className="flex-1">
-          <h3 className="mb-2 text-lg font-semibold text-emerald-500">
-            Check your email to confirm
-          </h3>
-          <p className="text-emerald-500">
-            An email has been sent with instructions to reset your password
-          </p>
-        </div>
-      </div>
+      <Alert variant="default">
+        <CheckCircle className="h-4 w-4" />
+        <AlertTitle>Check your email to confirm</AlertTitle>
+        <AlertDescription>
+          An email has been sent with instructions to reset your password
+        </AlertDescription>
+      </Alert>
     );
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        className="mb-4 w-full"
-        placeholder="Your email address"
-        label="Email *"
-        {...register("email")}
-        autoFocus
-        error={errors.email?.message}
-      />
+    <form onSubmit={onSubmit} className="my-16 grid gap-4">
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          placeholder="name@example.com"
+          autoComplete="email"
+          {...register("email")}
+          autoFocus
+        />
+        {!!errors.email?.message && (
+          <p className="text-sm text-destructive">{errors.email?.message}</p>
+        )}
+      </div>
 
-      <Button fullWidth className="my-8" loading={isSubmitting}>
-        Send Email
+      {!!errors.root?.message && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{errors.root.message}</AlertDescription>
+        </Alert>
+      )}
+
+      <Button disabled={isSubmitting} type="submit" className="w-full">
+        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        Send email
       </Button>
     </form>
   );

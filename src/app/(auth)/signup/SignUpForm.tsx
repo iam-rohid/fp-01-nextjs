@@ -1,13 +1,15 @@
 "use client";
 
-import TextField from "@/components/TextField";
-import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import supabaseClient from "@/libs/supabaseClient";
-import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const schema = yup
   .object({
@@ -69,46 +71,79 @@ export default function SignUpForm({ email }: { email?: string }) {
   );
 
   return (
-    <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-      <TextField
-        className="col-span-1"
-        label="First Name *"
-        placeholder="John"
-        {...register("first_name")}
-        error={errors.first_name?.message}
-        autoFocus
-      />
-      <TextField
-        className="col-span-1"
-        label="Last Name *"
-        placeholder="Doe"
-        {...register("last_name")}
-        error={errors.last_name?.message}
-      />
-      <TextField
-        className="col-span-2"
-        label="Email *"
-        placeholder="john@example.com"
-        {...register("email")}
-        autoComplete="username"
-        error={errors.email?.message}
-        disabled
-      />
-      <TextField
-        className="col-span-2"
-        label="Password *"
-        placeholder="8-16 characters"
-        type="password"
-        autoComplete="new-password"
-        {...register("password")}
-        error={errors.password?.message}
-      />
-
-      <div className="col-span-2">
-        <ErrorBox error={errors.root?.message} />
+    <form onSubmit={onSubmit} className="my-16 grid gap-4">
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          placeholder="Your email address"
+          autoComplete="email"
+          {...register("email")}
+          disabled
+        />
+        {!!errors.email?.message && (
+          <p className="text-sm text-destructive">{errors.email?.message}</p>
+        )}
       </div>
 
-      <Button className="col-span-2" fullWidth loading={isSubmitting}>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="first_name">First name</Label>
+          <Input
+            type="text"
+            id="first_name"
+            placeholder="John"
+            {...register("first_name")}
+            autoFocus
+          />
+          {!!errors.first_name?.message && (
+            <p className="text-sm text-destructive">
+              {errors.first_name?.message}
+            </p>
+          )}
+        </div>
+
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="last_name">Last name</Label>
+          <Input
+            type="text"
+            id="last_name"
+            placeholder="Doe"
+            {...register("last_name")}
+          />
+          {!!errors.last_name?.message && (
+            <p className="text-sm text-destructive">
+              {errors.last_name?.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          type="password"
+          id="password"
+          placeholder="8-16 characters"
+          autoComplete="password"
+          {...register("password")}
+        />
+        {!!errors.password?.message && (
+          <p className="text-sm text-destructive">{errors.password?.message}</p>
+        )}
+      </div>
+
+      {!!errors.root?.message && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{errors.root.message}</AlertDescription>
+        </Alert>
+      )}
+
+      <Button disabled={isSubmitting} type="submit" className="w-full">
+        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Create Account
       </Button>
     </form>

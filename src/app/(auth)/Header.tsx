@@ -1,31 +1,29 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/utils/constant";
 import Link from "next/link";
 import React from "react";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 bg-white ring-1 ring-slate-200">
-      <div className="mx-auto flex h-16 max-w-screen-xl items-center px-6">
-        <Link href="/" className="text-2xl font-semibold text-slate-900">
-          {APP_NAME}
-        </Link>
-
-        <div className="flex-1 items-center justify-end">
-          <nav className="flex items-center justify-end gap-4 max-sm:hidden">
-            <Link
-              className="text-slate-600 hover:text-slate-900"
-              href="/signin"
-            >
-              Sign In
-            </Link>
-            <Link
-              className="flex h-12 items-center rounded-full bg-primary-500 px-6 text-white transition-colors hover:bg-primary-600"
-              href="/signup"
-            >
-              Sign Up
-            </Link>
-          </nav>
+    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 shadow-sm backdrop-blur">
+      <div className="container flex h-14 items-center">
+        <div className="flex flex-1 items-center">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <div className="h-6 w-6 rounded-full bg-slate-900"></div>
+            <p className="font-bold">{APP_NAME}</p>
+          </Link>
         </div>
+
+        <nav className="flex items-center justify-end space-x-2">
+          <Button variant="ghost" asChild>
+            <Link href="/signin">Sign In</Link>
+          </Button>
+          <Button variant="default" asChild>
+            <Link href="/signup">Sign Up</Link>
+          </Button>
+        </nav>
       </div>
     </header>
   );

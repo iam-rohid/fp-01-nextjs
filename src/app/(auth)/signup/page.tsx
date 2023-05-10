@@ -1,7 +1,6 @@
 import Link from "next/link";
 import SignUpForm from "./SignUpForm";
 import EmailCheckForm from "./EmailCheckForm";
-import { MdArrowBackIosNew } from "react-icons/md";
 
 export const metadata = {
   title: "Sign Up",
@@ -14,27 +13,25 @@ export default function SignUp({
 }) {
   return (
     <div className="mx-auto w-full max-w-md space-y-8 px-6">
-      <div>
-        {email && (
-          <Link
-            href="/signup"
-            className="mb-2 inline-flex items-center font-medium text-primary-500 hover:underline"
-          >
-            <MdArrowBackIosNew className="-ml-1 mr-1 text-lg" />
-            Back
-          </Link>
-        )}
-        <h3 className="mb-2 text-3xl font-semibold text-slate-800">
+      <div className="felx flex-col space-y-2 text-center">
+        <h3 className="text-2xl font-semibold tracking-tight">
           {email ? "What is your name?" : "Get started"}
         </h3>
-        <p className="text-slate-600">Create a new account</p>
+        <p className="text-sm text-muted-foreground">
+          {email
+            ? "Enter the details below to complete your account"
+            : "Enter your email below to create your account"}
+        </p>
       </div>
 
       {email ? <SignUpForm email={email} /> : <EmailCheckForm />}
 
-      <p>
+      <p className="text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/signin" className="font-medium text-primary-500">
+        <Link
+          href="/signin"
+          className="underline underline-offset-4 hover:text-primary"
+        >
           Sign In
         </Link>
       </p>

@@ -1,13 +1,15 @@
 "use client";
 
-import TextField from "@/components/TextField";
-import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import supabaseClient from "@/libs/supabaseClient";
-import ErrorBox from "@/components/ErrorBox";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const schema = yup
   .object({
@@ -24,8 +26,7 @@ export default function EmailCheckForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
-    setError,
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
@@ -48,19 +49,32 @@ export default function EmailCheckForm() {
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        className="mb-4 w-full"
-        label="Email *"
-        placeholder="john@example.com"
-        {...register("email")}
-        error={errors.email?.message}
-        autoFocus
-      />
+    <form onSubmit={onSubmit} className="my-16 grid gap-4">
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          placeholder="Your email address"
+          autoComplete="email"
+          {...register("email")}
+          autoFocus
+        />
+        {!!errors.email?.message && (
+          <p className="text-sm text-destructive">{errors.email?.message}</p>
+        )}
+      </div>
 
-      <ErrorBox error={errors.root?.message} />
+      {!!errors.root?.message && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{errors.root.message}</AlertDescription>
+        </Alert>
+      )}
 
-      <Button className="my-8" fullWidth loading={isSubmitting}>
+      <Button disabled={isSubmitting} type="submit" className="w-full">
+        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Continue
       </Button>
     </form>

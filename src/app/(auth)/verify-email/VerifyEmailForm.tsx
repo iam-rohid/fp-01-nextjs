@@ -1,13 +1,15 @@
 "use client";
 
-import TextField from "@/components/TextField";
-import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import supabaseClient from "@/libs/supabaseClient";
-import ErrorBox from "@/components/ErrorBox";
-import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const schema = yup
   .object({
@@ -24,7 +26,7 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -32,6 +34,7 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
       email,
     },
   });
+  const { toast } = useToast();
 
   const onSubmit = handleSubmit(async ({ email }) => {
     const { error } = await supabaseClient.auth.signInWithOtp({
@@ -40,36 +43,46 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
         emailRedirectTo: `${window.origin}/welcome`,
       },
     });
-
     if (error) {
       setError("root", {
         message: error.message,
       });
     }
+    toast({
+      title: "Verification email sent",
+      description: "Please check your email to verify email.",
+    });
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        className="mb-4 w-full"
-        label="Email *"
-        placeholder="john@example.com"
-        disabled
-        {...register("email")}
-        error={errors.email?.message}
-      />
+    <form onSubmit={onSubmit} className="my-16 grid gap-4">
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          placeholder="name@example.com"
+          autoComplete="email"
+          {...register("email")}
+          autoFocus
+          disabled
+        />
+        {!!errors.email?.message && (
+          <p className="text-sm text-destructive">{errors.email?.message}</p>
+        )}
+      </div>
 
-      <ErrorBox error={errors.root?.message} />
+      {!!errors.root?.message && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{errors.root.message}</AlertDescription>
+        </Alert>
+      )}
 
-      <Button
-        className="my-8"
-        fullWidth
-        loading={isSubmitting}
-        disabled={isSubmitSuccessful}
-      >
-        {isSubmitSuccessful
-          ? "Verification email sent"
-          : "Resend verification email"}
+      <Button disabled={isSubmitting} type="submit" className="w-full">
+        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        Resend email
       </Button>
     </form>
   );
