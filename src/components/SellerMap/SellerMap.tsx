@@ -28,7 +28,6 @@ export default function SellerMap({ sellers, onItemClick }: SellerMapProps) {
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if (!mapDivRef.current) return;
     mapRef.current = L.map(mapDivRef.current).setView([51.505, -0.09], 4);
 
