@@ -1,12 +1,17 @@
 import { ReactNode } from "react";
 import { format } from "date-fns";
-import clsx from "clsx";
-import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
-import { Database } from "@/types/database";
 import CircularProgress from "./CircularProgress";
 import supabaseClient from "@/libs/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { ExternalLink } from "lucide-react";
 
 const fetchSeller = async (sellerId: string) => {
   const { data, error } = await supabaseClient
@@ -53,25 +58,28 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
   }
 
   return (
-    <main className="mx-auto max-w-screen-2xl p-4">
-      <div className="grid grid-cols-12 gap-4 md:gap-8">
-        <Card className="col-span-12">
-          <div className="p-4 md:p-8">
-            <h1 className="mb-2 text-2xl font-bold">{seller.name}</h1>
-            <Link
-              href={`https://amazon.com/sp?seller=${"A10111992WJRYRFBZH9IS"}`}
-              className="text-primary-500 inline-flex items-center gap-1 hover:underline"
-              target="_blank"
-            >
-              Visit the <b className="font-medium">{seller.name}</b> storefront
-              <span className="inline-block text-lg">
-                <MdOpenInNew />
-              </span>
-            </Link>
-          </div>
+    <main className="h-full w-full overflow-y-auto">
+      <div className="container space-y-4 py-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>{seller.name}</CardTitle>
+            <CardDescription>
+              <Link
+                href={`https://amazon.com/sp?seller=${"A10111992WJRYRFBZH9IS"}`}
+                className="underline underline-offset-4 hover:text-primary"
+                target="_blank"
+              >
+                Visit the <strong>{seller.name}</strong> storefront
+                <ExternalLink className="ml-2 inline h-4 w-4" />
+              </Link>
+            </CardDescription>
+          </CardHeader>
         </Card>
-        <Card className="col-span-12">
-          <div className="grid gap-4 p-4 md:grid-cols-2 md:gap-8 md:p-8 xl:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Details</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <DetailsItem title="Seller Id" value={"A10111992WJRYRFBZH9IS"} />
             <DetailsItem
               title="Last Updated"
@@ -94,7 +102,7 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
               title="Address"
               value={`235 Rue Ness, Saint-Laurent, Quebec, CA H4T 1S1`}
             />
-          </div>
+          </CardContent>
         </Card>
       </div>
     </main>
@@ -103,23 +111,9 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
 
 const DetailsItem = ({ title, value }: { title: string; value: ReactNode }) => {
   return (
-    <div>
-      <p className="mb-1 text-slate-500">{title}</p>
-      <p className="font-medium text-slate-900">{value}</p>
-    </div>
-  );
-};
-
-const Card = ({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div className={clsx("rounded-lg border bg-white", className)}>
-      {children}
+    <div className="space-y-1">
+      <p className="text-sm text-muted-foreground">{title}</p>
+      <p className="font-medium">{value}</p>
     </div>
   );
 };
