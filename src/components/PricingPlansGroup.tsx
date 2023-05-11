@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import PlanCard from "./PlanCard";
-import clsx from "clsx";
 import { SubscriptionPlan } from "@/types/subscription-plan";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
@@ -82,7 +81,7 @@ export default function PricingPlansGroup() {
 
   return (
     <Tabs value={isMonthly ? "monthly" : "yearly"}>
-      <TabsList className="mx-auto mb-12 grid w-full max-w-xs grid-cols-2">
+      <TabsList className="mx-auto mb-8 grid w-full max-w-xs grid-cols-2">
         <TabsTrigger onClick={() => setIsMonthly(true)} value="monthly">
           Monthly
         </TabsTrigger>
@@ -91,7 +90,7 @@ export default function PricingPlansGroup() {
         </TabsTrigger>
       </TabsList>
 
-      <div className="flex gap-6 max-lg:flex-col max-lg:items-center">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {plans.map((plan, i) => (
           <PlanCard key={i} plan={plan} isYearly={!isMonthly} href="/signin" />
         ))}

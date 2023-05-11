@@ -12,9 +12,10 @@ import {
   MapIcon,
   StoreIcon,
   LogOutIcon,
-  SettingsIcon,
   UserIcon,
   PanelLeftOpenIcon,
+  CreditCardIcon,
+  StarIcon,
 } from "lucide-react";
 import { SidebarListItem } from "@/components/ui/sidebar-list-item";
 import {
@@ -176,8 +177,14 @@ const UserButton = ({
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/billing">
-              <SettingsIcon className="mr-2 h-4 w-4" />
-              <span>Settings</span>
+              <CreditCardIcon className="mr-2 h-4 w-4" />
+              <span>Billing</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/subscription">
+              <StarIcon className="mr-2 h-4 w-4" />
+              <span>Subscription</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

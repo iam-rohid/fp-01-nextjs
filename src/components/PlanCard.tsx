@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Stars } from "lucide-react";
 
 export default function PlanCard({
   plan,
@@ -29,8 +29,8 @@ export default function PlanCard({
       className={clsx("relative flex-1", plan.isPopular ? "shadow-2xl" : "")}
     >
       {plan.isPopular && (
-        <div className="absolute -top-4 left-1/2 flex h-10 -translate-x-1/2 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground">
-          <p>Most Popular</p>
+        <div className="absolute right-4 top-0 flex h-10 items-center justify-center whitespace-nowrap rounded-b-lg bg-primary px-4 text-sm font-medium text-primary-foreground">
+          Most Popular
         </div>
       )}
       <CardHeader>
