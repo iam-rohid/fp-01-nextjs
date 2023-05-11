@@ -4,10 +4,10 @@ import { type Seller } from "@/components/SellerMap";
 import Tab from "@/components/Tab";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { ReactNode, useCallback, useState } from "react";
-import { MdMap, MdStore } from "react-icons/md";
+import React, { useCallback, useState } from "react";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
+import { Map, Store } from "lucide-react";
 
 const SellerMap = dynamic(() => import("@/components/SellerMap/SellerMap"), {
   ssr: false,
@@ -73,12 +73,12 @@ export default function SellerMapTabs({
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="overflow-x-auto overflow-y-hidden border-b bg-background">
-        <div className="flex h-14">
+        <div className="flex h-12">
           <Tab
             onClick={() => onMapTabClick()}
             value="map"
             label="Seller Map"
-            icon={<MdMap />}
+            icon={<Map className="mr-2 h-5 w-5" />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
@@ -88,7 +88,7 @@ export default function SellerMapTabs({
               onClose={onTabClose}
               value={seller.id.toString()}
               label={seller.label || "Unknown"}
-              icon={<MdStore />}
+              icon={<Store className="mr-2 h-5 w-5" />}
               selectedTab={tabId}
             />
           ))}

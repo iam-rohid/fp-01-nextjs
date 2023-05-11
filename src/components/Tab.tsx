@@ -33,8 +33,8 @@ const Tab = ({
           }
         )}
       >
-        {!!icon && <span className="mr-2 text-2xl">{icon}</span>}
-        <span className="max-w-[140px] truncate whitespace-nowrap">
+        {icon}
+        <span className="max-w-[140px] truncate whitespace-nowrap text-sm">
           {label}
         </span>
       </button>

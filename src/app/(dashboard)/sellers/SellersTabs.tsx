@@ -8,6 +8,7 @@ import { useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
+import { Store } from "lucide-react";
 
 type Seller = Database["public"]["Tables"]["sellers"]["Row"];
 type TabProps = { id: string; label?: string };
@@ -70,12 +71,12 @@ export default function SellersTabs({
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="overflow-x-auto overflow-y-hidden border-b bg-background">
-        <div className="flex h-14">
+        <div className="flex h-12">
           <Tab
             onClick={() => onMapTabClick()}
             value={SELLERS_TAB_ID}
             label="Sellers"
-            icon={<MdStore />}
+            icon={<Store className="mr-2 h-5 w-5" />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
@@ -85,7 +86,7 @@ export default function SellersTabs({
               onClose={onTabClose}
               value={seller.id.toString()}
               label={seller.label || "Unknown"}
-              icon={<MdStore />}
+              icon={<Store className="mr-2 h-5 w-5" />}
               selectedTab={tabId}
             />
           ))}
