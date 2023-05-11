@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import PlanCard from "./PlanCard";
 import clsx from "clsx";
 import { SubscriptionPlan } from "@/types/subscription-plan";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 const BASIC_FEATURES = [
   "2 users",
@@ -80,45 +81,21 @@ export default function PricingPlansGroup() {
   const [isMonthly, setIsMonthly] = useState(true);
 
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-center">
-        <div className="relative h-16 w-full max-w-[300px] rounded-full border bg-slate-100 p-1">
-          <div
-            className={clsx(
-              "absolute bottom-0 top-0 w-1/2 p-1 transition-[left]",
-              isMonthly ? "left-0" : "left-1/2"
-            )}
-          >
-            <div className="h-full w-full rounded-full bg-white ring-1 ring-slate-200"></div>
-          </div>
-          <div className="absolute inset-0 flex">
-            <button
-              className={clsx(
-                "flex h-full flex-1 items-center justify-center font-medium transition-colors",
-                isMonthly ? "text-slate-900" : "text-slate-600"
-              )}
-              onClick={() => setIsMonthly(true)}
-            >
-              Monthly
-            </button>
-            <button
-              className={clsx(
-                "flex h-full flex-1 items-center justify-center font-medium transition-colors",
-                !isMonthly ? "text-slate-900" : "text-slate-600"
-              )}
-              onClick={() => setIsMonthly(false)}
-            >
-              Yearly
-            </button>
-          </div>
-        </div>
-      </div>
+    <Tabs value={isMonthly ? "monthly" : "yearly"}>
+      <TabsList className="mx-auto mb-12 grid w-full max-w-xs grid-cols-2">
+        <TabsTrigger onClick={() => setIsMonthly(true)} value="monthly">
+          Monthly
+        </TabsTrigger>
+        <TabsTrigger onClick={() => setIsMonthly(false)} value="yearly">
+          Yearly
+        </TabsTrigger>
+      </TabsList>
 
       <div className="flex gap-6 max-lg:flex-col max-lg:items-center">
         {plans.map((plan, i) => (
           <PlanCard key={i} plan={plan} isYearly={!isMonthly} href="/signin" />
         ))}
       </div>
-    </div>
+    </Tabs>
   );
 }

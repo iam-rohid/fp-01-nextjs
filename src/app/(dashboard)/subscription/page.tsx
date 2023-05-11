@@ -1,7 +1,14 @@
 import PricingPlansGroup from "@/components/PricingPlansGroup";
 import AppBar from "../AppBar";
-import Button from "@/components/Button";
 import { APP_NAME } from "@/utils/constant";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const metadata = {
   title: `Subscription - ${APP_NAME}`,
@@ -10,16 +17,27 @@ export const metadata = {
 export default function Subscription() {
   return (
     <div className="h-full w-full overflow-y-auto">
-      <AppBar title={"Subscription"} />
-      <div className="mx-auto max-w-screen-xl space-y-8 p-6">
-        <div className="rounded-xl bg-white p-6 ring-1 ring-slate-200">
-          <p className="text-2xl font-semibold">
-            Your current plan on monthly billing
-          </p>
-          <p className="mt-2 text-lg font-medium">Basic ($19)</p>
-          <Button className="mt-4">Cancel Subscription</Button>
-        </div>
-        <PricingPlansGroup />
+      <AppBar title="Subscription" />
+      <div className="container space-y-8 py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Your current plan on monthly billing</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Basic ($19)</p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="destructive">Cancel Subscription</Button>
+          </CardFooter>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Plans</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PricingPlansGroup />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
