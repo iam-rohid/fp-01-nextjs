@@ -66,6 +66,14 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -253,40 +261,45 @@ const TableComponent = ({
         .sort((a, b) => (b === "name" ? 1 : -1))
         .map((columnName) =>
           columnHelper.accessor(columnName, {
-            cell: (info) => info.getValue(),
+            cell: (info) => {
+              if (columnName === "estimate_sales") {
+                return `$${info.getValue()?.toLocaleString()}`;
+              }
+              return info.getValue();
+            },
             header: COLUMN_NAME_TO_LABEL[columnName],
-            size: 300,
+            size: columnName === "name" ? 320 : 200,
           })
         ),
       columnHelper.accessor(() => "column_1", {
         cell: () => "Test Data",
         header: "Test Column 1",
-        size: 300,
+        size: 200,
       }),
       columnHelper.accessor(() => "column_2", {
         cell: () => "Test Data",
         header: "Test Column 2",
-        size: 300,
+        size: 200,
       }),
       columnHelper.accessor(() => "column_3", {
         cell: () => "Test Data",
         header: "Test Column 3",
-        size: 300,
+        size: 200,
       }),
       columnHelper.accessor(() => "column_4", {
         cell: () => "Test Data",
         header: "Test Column 4",
-        size: 300,
+        size: 200,
       }),
       columnHelper.accessor(() => "column_5", {
         cell: () => "Test Data",
         header: "Test Column 5",
-        size: 300,
+        size: 200,
       }),
       columnHelper.accessor(() => "column_6", {
         cell: () => "Test Data",
         header: "Test Column 6",
-        size: 300,
+        size: 200,
       }),
     ],
     [columnNames]
@@ -320,60 +333,46 @@ const TableComponent = ({
 
   return (
     <div
-      className="relative flex-1 overflow-auto"
+      className="flex-1 overflow-auto"
       onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
     >
-      <table
-        className="h-full w-full border-collapse"
-        style={{ width: table.getCenterTotalSize() }}
-      >
-        <thead className="sticky top-0 z-20">
+      <Table style={{ width: table.getCenterTotalSize() }}>
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="flex w-fit">
-              <th className="sticky left-0 z-10 w-10 border-b border-r bg-slate-100"></th>
+            <TableRow key={headerGroup.id}>
+              <TableHead>Menu</TableHead>
               {headerGroup.headers.map((header) => (
-                <th
+                <TableHead
                   key={header.id}
-                  className={clsx(
-                    "relative flex items-center gap-2 border-b bg-slate-100 p-2 font-semibold",
-                    header.id === "name"
-                      ? "sticky left-10 z-10 border-r-2"
-                      : "border-r"
-                  )}
                   colSpan={header.colSpan}
                   style={{ width: header.getSize() }}
+                  className="relative"
                 >
-                  <p className="flex-1 truncate">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </p>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   <div
                     onMouseDown={header.getResizeHandler()}
                     onTouchStart={header.getResizeHandler()}
                     className={clsx(
-                      "resizer absolute -right-px top-0 h-full w-2 cursor-col-resize touch-none select-none opacity-0"
+                      "resizer absolute -right-px top-0 h-full w-2 cursor-col-resize touch-none select-none opacity-100"
                     )}
                   />
-                </th>
+                </TableHead>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        <tbody>
+        </TableHeader>
+        <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-100">
-              <td className="sticky left-0 z-10 flex w-10 items-center justify-center border-b border-r bg-white">
+            <TableRow key={row.id}>
+              <TableCell className="py-0">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      title="Menu"
-                      className="h-8 w-8 p-0"
-                    >
+                    <Button variant="ghost" title="Menu" className="p-2">
                       <MoreVerticalIcon className="h-5 w-5" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -394,26 +393,16 @@ const TableComponent = ({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </td>
+              </TableCell>
               {row.getVisibleCells().map((cell) => (
                 <ContextMenu key={cell.id}>
                   <ContextMenuTrigger asChild>
-                    <td
-                      className={clsx(
-                        "flex items-center border-b bg-white p-2",
-                        cell.column.id === "name"
-                          ? "sticky left-10 z-10 border-r-2"
-                          : "border-r"
+                    <TableCell style={{ width: cell.column.getSize() }}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                      style={{ width: cell.column.getSize() }}
-                    >
-                      <p className="flex-1 truncate">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </p>
-                    </td>
+                    </TableCell>
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <ContextMenuItem
@@ -442,10 +431,10 @@ const TableComponent = ({
                   </ContextMenuContent>
                 </ContextMenu>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };

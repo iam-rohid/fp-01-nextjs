@@ -107,7 +107,7 @@ export default function Sidebar({ user }: { user: User }) {
         <footer className="p-4">
           <nav className="space-y-px">
             <SidebarListItem asChild>
-              <Link href="#">
+              <Link href="/help">
                 <BookIcon className="mr-2 h-4 w-4" /> Help & Support
               </Link>
             </SidebarListItem>
