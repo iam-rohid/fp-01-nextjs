@@ -22,7 +22,6 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronsUpDownIcon,
-  ColumnsIcon,
   CopyIcon,
   ExternalLinkIcon,
   LayoutGridIcon,
@@ -30,6 +29,7 @@ import {
   MoreVerticalIcon,
   PlusIcon,
   RefreshCcwIcon,
+  SlidersHorizontalIcon,
   StoreIcon,
   XIcon,
 } from "lucide-react";
@@ -41,8 +41,11 @@ import {
 } from "@/components/ui/popover";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -835,65 +838,36 @@ const ColumnsButton = ({
   value: ColumnName[];
   onChange: (value: ColumnName[]) => void;
 }) => {
-  const [columns, setColumns] = useState<ColumnName[]>(value);
-
-  const onApply = useCallback(() => {
-    onChange(columns);
-  }, [columns, onChange]);
-
   return (
-    <Popover onOpenChange={() => setColumns(value)}>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <ColumnsIcon className="mr-2 h-4 w-4" />
-          Columns
+          <SlidersHorizontalIcon className="mr-2 h-4 w-4" />
+          Views
         </Button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-[320px] p-0">
-        <div className="space-y-2 p-2">
-          {COLUMN_NAMES.map((columnName) => {
-            const isActive = columns.includes(columnName);
-            return (
-              <div key={columnName} className="flex items-center gap-2 p-2">
-                <p className="flex-1 truncate text-sm font-medium text-accent-foreground">
-                  {COLUMN_NAME_TO_LABEL[columnName]}
-                </p>
-
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="airplane-mode">Show: </Label>
-                  <Switch
-                    id="airplane-mode"
-                    checked={isActive}
-                    onCheckedChange={() => {
-                      if (isActive) {
-                        setColumns(
-                          columns.filter((item) => item !== columnName)
-                        );
-                      } else {
-                        setColumns([...columns, columnName]);
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <footer className="flex items-center justify-between gap-4 border-t p-2">
-          <div className="flex-1"></div>
-
-          <PopoverClose asChild>
-            <button
-              disabled={columns === value}
-              onClick={onApply}
-              className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {COLUMN_NAMES.map((columnName) => {
+          const isActive = value.includes(columnName);
+          return (
+            <DropdownMenuCheckboxItem
+              key={columnName}
+              checked={isActive}
+              onCheckedChange={() =>
+                onChange(
+                  isActive
+                    ? value.filter((column) => column !== columnName)
+                    : [...value, columnName]
+                )
+              }
             >
-              Apply
-            </button>
-          </PopoverClose>
-        </footer>
-      </PopoverContent>
-    </Popover>
+              {COLUMN_NAME_TO_LABEL[columnName]}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
