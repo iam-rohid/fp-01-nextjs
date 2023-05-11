@@ -40,14 +40,14 @@ export default function PlansGrid() {
         Choose the plan that fits your needs.
       </p>
       <div className="mb-8 flex items-center justify-center">
-        <div className="relative h-14 w-full max-w-[320px] rounded-full border border-slate-200 bg-white p-1">
+        <div className="relative h-14 w-full max-w-[320px] rounded-full border bg-white p-1">
           <div
             className={clsx(
               "absolute bottom-0 top-0 w-1/2 p-1 transition-[left]",
               isMonthly ? "left-0" : "left-1/2"
             )}
           >
-            <div className="h-full w-full rounded-full bg-primary-500"></div>
+            <div className="bg-primary-500 h-full w-full rounded-full"></div>
           </div>
           <div className="absolute inset-0 flex">
             <button

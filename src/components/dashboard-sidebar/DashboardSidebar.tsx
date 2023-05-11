@@ -1,17 +1,21 @@
 "use client";
 
-import { APP_NAME } from "@/utils/constant";
 import { User } from "@supabase/supabase-js";
 import clsx from "clsx";
-import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SidebarList from "./SidebarList";
 import MobileHeader from "./MobileHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarHeader from "./SidebarHeader";
+import { usePathname } from "next/navigation";
 
 export default function DashboardSidebar({ user }: { user: User }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -33,7 +37,7 @@ export default function DashboardSidebar({ user }: { user: User }) {
 
       <aside
         className={clsx(
-          "absolute bottom-0 top-0 z-40 flex w-64 flex-col border-r border-slate-200 bg-background transition-[left] lg:left-0",
+          "absolute bottom-0 top-0 z-40 flex w-64 flex-col border-r bg-background transition-[left] lg:left-0",
           sidebarOpen ? "left-0" : "-left-64"
         )}
       >

@@ -1,7 +1,7 @@
+import { Loader2 } from "lucide-react";
+
 const CircularProgress = () => {
-  return (
-    <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-  );
+  return <Loader2 className="h-6 w-6 animate-spin" />;
 };
 
 export default CircularProgress;

@@ -82,7 +82,7 @@ export default function PricingPlansGroup() {
   return (
     <div>
       <div className="mb-8 flex items-center justify-center">
-        <div className="relative h-16 w-full max-w-[300px] rounded-full border border-slate-200 bg-slate-100 p-1">
+        <div className="relative h-16 w-full max-w-[300px] rounded-full border bg-slate-100 p-1">
           <div
             className={clsx(
               "absolute bottom-0 top-0 w-1/2 p-1 transition-[left]",

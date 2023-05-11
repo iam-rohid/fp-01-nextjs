@@ -60,7 +60,7 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
             <h1 className="mb-2 text-2xl font-bold">{seller.name}</h1>
             <Link
               href={`https://amazon.com/sp?seller=${"A10111992WJRYRFBZH9IS"}`}
-              className="inline-flex items-center gap-1 text-primary-500 hover:underline"
+              className="text-primary-500 inline-flex items-center gap-1 hover:underline"
               target="_blank"
             >
               Visit the <b className="font-medium">{seller.name}</b> storefront
@@ -118,9 +118,7 @@ const Card = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={clsx("rounded-lg border border-slate-200 bg-white", className)}
-    >
+    <div className={clsx("rounded-lg border bg-white", className)}>
       {children}
     </div>
   );

@@ -37,7 +37,7 @@
 }
 
 .leaflet-left .leaflet-control {
-  @apply ml-4 mt-4 overflow-hidden rounded-lg border border-slate-200 shadow-xl;
+  @apply ml-4 mt-4 overflow-hidden rounded-lg border shadow-xl;
 }
 
 .leaflet-touch .leaflet-bar a {
@@ -53,5 +53,5 @@
 }
 
 .leaflet-popup-content-wrapper {
-  @apply rounded-lg border border-slate-200 bg-white shadow-xl;
+  @apply rounded-lg border bg-white shadow-xl;
 }

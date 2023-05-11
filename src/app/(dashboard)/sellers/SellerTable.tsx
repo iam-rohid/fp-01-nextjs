@@ -10,16 +10,12 @@ import clsx from "clsx";
 import { useCallback, useMemo, useState } from "react";
 import {
   MdAdd,
-  MdAutorenew,
   MdClose,
   MdContentCopy,
   MdExpandMore,
-  MdFilterList,
   MdGridView,
   MdMoreVert,
   MdOpenInNew,
-  MdOutlineViewColumn,
-  MdSort,
   MdStore,
 } from "react-icons/md";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -33,6 +29,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import supabaseClient from "@/libs/supabaseClient";
 import CircularProgress from "@/components/CircularProgress";
 import { FilterOperator } from "@/types/FilterOperator";
+import { Button } from "@/components/ui/button";
+import { Columns, Filter, ListOrdered, RefreshCcw } from "lucide-react";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -151,29 +149,28 @@ export default function SellerTable({
   );
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-white">
-      <header className="flex items-center gap-4 overflow-x-auto border-b border-slate-200 px-4 py-2">
+    <div className="flex h-full w-full flex-col overflow-hidden bg-background">
+      <header className="flex items-center gap-4 overflow-x-auto border-b px-4 py-2">
         <div className="flex flex-1 items-center gap-2">
           <FilterButton value={filters} onChange={setFilters} />
+
           <SortButton value={orders} onChange={setOrders} />
 
           <ColumnsButton value={columnNames} onChange={setColumnNames} />
 
-          <button
-            className={clsx(
-              "flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:opacity-50"
-            )}
+          <Button
+            variant="outline"
             disabled={isRefetching || isLoading}
             onClick={() => refetch()}
           >
-            <MdAutorenew
+            <RefreshCcw
               className={clsx(
-                "text-xl md:-ml-1",
+                "mr-2 h-4 w-4",
                 isRefetching ? "animate-spin" : ""
               )}
             />
-            <span className="max-md:hidden">Refresh</span>
-          </button>
+            Refresh
+          </Button>
         </div>
       </header>
 
@@ -298,12 +295,12 @@ const TableComponent = ({
         <thead className="sticky top-0 z-20">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id} className="flex w-fit">
-              <th className="sticky left-0 z-10 w-10 border-b border-r border-slate-200 bg-slate-100"></th>
+              <th className="sticky left-0 z-10 w-10 border-b border-r bg-slate-100"></th>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
                   className={clsx(
-                    "relative flex items-center gap-2 border-b border-slate-200 bg-slate-100 p-2 font-semibold",
+                    "relative flex items-center gap-2 border-b bg-slate-100 p-2 font-semibold",
                     header.id === "name"
                       ? "sticky left-10 z-10 border-r-2"
                       : "border-r"
@@ -334,7 +331,7 @@ const TableComponent = ({
         <tbody>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-100">
-              <td className="sticky left-0 z-10 flex w-10 items-center justify-center border-b border-r border-slate-200 bg-white">
+              <td className="sticky left-0 z-10 flex w-10 items-center justify-center border-b border-r bg-white">
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger asChild>
                     <button
@@ -379,7 +376,7 @@ const TableComponent = ({
                   <ContextMenu.Trigger asChild>
                     <td
                       className={clsx(
-                        "flex items-center border-b border-slate-200 bg-white p-2",
+                        "flex items-center border-b bg-white p-2",
                         cell.column.id === "name"
                           ? "sticky left-10 z-10 border-r-2"
                           : "border-r"
@@ -498,14 +495,12 @@ const FilterButton = ({
   return (
     <Popover.Root onOpenChange={() => setFilters(value)}>
       <Popover.Trigger asChild>
-        <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdFilterList className="text-xl md:-ml-1" />
-          <span className="max-md:hidden">
-            {value.length
-              ? `Filtered by ${value.length} rule${value.length > 1 ? "s" : ""}`
-              : "Filter"}
-          </span>
-        </button>
+        <Button variant="outline">
+          <Filter className="mr-2 h-4 w-4" />
+          {value.length
+            ? `Filtered by ${value.length} rule${value.length > 1 ? "s" : ""}`
+            : "Filter"}
+        </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
@@ -517,7 +512,7 @@ const FilterButton = ({
               {filters.map((filter) => (
                 <div key={filter.id} className="flex items-center gap-2">
                   <DropdownMenu.Root>
-                    <DropdownMenu.Trigger className="flex h-10 flex-1 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
+                    <DropdownMenu.Trigger className="flex h-10 flex-1 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
                       <p className="flex-1">
                         {COLUMN_NAME_TO_LABEL[filter.columnName]}
                       </p>
@@ -551,7 +546,7 @@ const FilterButton = ({
                   </DropdownMenu.Root>
 
                   <DropdownMenu.Root>
-                    <DropdownMenu.Trigger className="flex h-10 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border border-slate-200 pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
+                    <DropdownMenu.Trigger className="flex h-10 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
                       <p className="flex-1">
                         {FILTER_OPERATOR_TO_LABEL[filter.operator][0]}
                       </p>
@@ -601,7 +596,7 @@ const FilterButton = ({
                       );
                     }}
                     placeholder="Enter a value"
-                    className="h-10 w-40 min-w-0 max-w-none rounded-lg border border-slate-200 px-4"
+                    className="h-10 w-40 min-w-0 max-w-none rounded-lg border px-4"
                   />
                   <button
                     className="flex h-10 w-10 items-center justify-center gap-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900"
@@ -624,7 +619,7 @@ const FilterButton = ({
               </div>
             </div>
           )}
-          <footer className="flex items-center justify-between gap-4 border-t border-slate-200 p-2">
+          <footer className="flex items-center justify-between gap-4 border-t p-2">
             <button
               className="flex h-10 items-center gap-2 rounded-lg px-4 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               onClick={addNewFilter}
@@ -636,7 +631,7 @@ const FilterButton = ({
               <button
                 disabled={filters === value}
                 onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
+                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
               >
                 Apply Filter
               </button>
@@ -684,14 +679,12 @@ const SortButton = ({
   return (
     <Popover.Root onOpenChange={() => setSorts(value)}>
       <Popover.Trigger asChild>
-        <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdSort className="text-xl md:-ml-1" />
-          <span className="max-md:hidden">
-            {value.length
-              ? `Sorted by ${value.length} rule${value.length > 1 ? "s" : ""}`
-              : "Sort"}
-          </span>
-        </button>
+        <Button variant="outline">
+          <ListOrdered className="mr-2 h-4 w-4" />
+          {value.length
+            ? `Sorted by ${value.length} rule${value.length > 1 ? "s" : ""}`
+            : "Sort"}
+        </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
@@ -757,11 +750,11 @@ const SortButton = ({
               </div>
             </div>
           )}
-          <footer className="flex items-center justify-between gap-4 border-t border-slate-200 p-2">
+          <footer className="flex items-center justify-between gap-4 border-t p-2">
             {availableColumns.length ? (
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
-                  <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50">
+                  <button className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50">
                     Pick a column to sort by
                     <MdExpandMore className="-mr-1 text-xl" />
                   </button>
@@ -793,7 +786,7 @@ const SortButton = ({
               <button
                 disabled={sorts === value}
                 onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
+                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
               >
                 Apply Sort
               </button>
@@ -821,10 +814,10 @@ const ColumnsButton = ({
   return (
     <Popover.Root onOpenChange={() => setColumns(value)}>
       <Popover.Trigger asChild>
-        <button className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900">
-          <MdOutlineViewColumn className="text-xl md:-ml-1" />
-          <span className="max-md:hidden">Columns</span>
-        </button>
+        <Button variant="outline">
+          <Columns className="mr-2 h-4 w-4" />
+          Columns
+        </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
@@ -871,14 +864,14 @@ const ColumnsButton = ({
             </div>
           </div>
 
-          <footer className="flex items-center justify-between gap-4 border-t border-slate-200 p-2">
+          <footer className="flex items-center justify-between gap-4 border-t p-2">
             <div className="flex-1"></div>
 
             <Popover.Close asChild>
               <button
                 disabled={columns === value}
                 onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
+                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
               >
                 Apply
               </button>

@@ -71,9 +71,9 @@ export default function SellerMapTabs({
   );
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="h-14 overflow-x-auto overflow-y-hidden border-b border-slate-200 bg-white">
-        <div className="flex h-full">
+    <div className="flex h-full w-full flex-col overflow-hidden">
+      <div className="overflow-x-auto overflow-y-hidden border-b bg-background">
+        <div className="flex h-14">
           <Tab
             onClick={() => onMapTabClick()}
             value="map"
@@ -94,6 +94,7 @@ export default function SellerMapTabs({
           ))}
         </div>
       </div>
+
       <div className="relative flex-1">
         <SellerMap
           sellers={sellers}
