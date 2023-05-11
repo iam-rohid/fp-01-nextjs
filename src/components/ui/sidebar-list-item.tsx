@@ -10,7 +10,8 @@ const sidebarListItemVariants = cva(
   {
     variants: {
       isActive: {
-        false: "hover:bg-muted text-foreground/60 hover:text-foreground",
+        false:
+          "hover:bg-muted text-muted-foreground hover:text-accent-foreground",
         true: "bg-primary text-primary-foreground hover:bg-primary/90",
       },
     },

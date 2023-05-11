@@ -24,10 +24,10 @@ const Tab = ({
       <button
         onClick={() => onClick && onClick(value)}
         className={clsx(
-          "flex h-full items-center px-4",
+          "flex h-full items-center px-4 transition-colors",
           selectedTab === value
-            ? "text-primary-500"
-            : "text-slate-600 hover:text-slate-900",
+            ? "text-primary"
+            : "text-muted-foreground hover:text-accent-foreground",
           {
             "pr-12": !!onClose,
           }
@@ -41,14 +41,18 @@ const Tab = ({
       {onClose && (
         <button
           onClick={() => onClose(value)}
-          className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xl text-foreground/60 transition-colors hover:bg-muted hover:text-foreground/90"
         >
           <MdClose />
         </button>
       )}
-      {selectedTab === value && (
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
-      )}
+
+      <div
+        className={clsx(
+          "absolute bottom-0 left-0 right-0 h-0.5 bg-primary",
+          selectedTab === value ? "opacity-100" : "opacity-0"
+        )}
+      />
     </div>
   );
 };
