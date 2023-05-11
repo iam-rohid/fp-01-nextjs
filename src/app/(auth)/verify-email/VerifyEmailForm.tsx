@@ -7,7 +7,7 @@ import supabaseClient from "@/libs/supabaseClient";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -81,7 +81,7 @@ export default function VerifyEmailForm({ email }: { email?: string }) {
       )}
 
       <Button disabled={isSubmitting} type="submit" className="w-full">
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isSubmitting && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
         Resend email
       </Button>
     </form>

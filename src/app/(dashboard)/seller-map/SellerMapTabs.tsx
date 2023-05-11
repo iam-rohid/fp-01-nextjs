@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
-import { Map, Store } from "lucide-react";
+import { MapIcon, StoreIcon } from "lucide-react";
 
 const SellerMap = dynamic(() => import("@/components/SellerMap/SellerMap"), {
   ssr: false,
@@ -78,17 +78,17 @@ export default function SellerMapTabs({
             onClick={() => onMapTabClick()}
             value="map"
             label="Seller Map"
-            icon={<Map className="mr-2 h-5 w-5" />}
+            icon={<MapIcon className="mr-2 h-5 w-5" />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
             <Tab
               key={seller.id}
               onClick={() => onItemClick(seller)}
-              onClose={onTabClose}
+              onClose={() => onTabClose(seller.id)}
               value={seller.id.toString()}
               label={seller.label || "Unknown"}
-              icon={<Store className="mr-2 h-5 w-5" />}
+              icon={<StoreIcon className="mr-2 h-5 w-5" />}
               selectedTab={tabId}
             />
           ))}

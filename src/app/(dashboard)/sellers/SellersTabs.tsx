@@ -3,12 +3,11 @@
 import { Database } from "@/types/database";
 import SellerTable from "./SellerTable";
 import Tab from "@/components/Tab";
-import { MdStore } from "react-icons/md";
 import { useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
-import { Store } from "lucide-react";
+import { StoreIcon } from "lucide-react";
 
 type Seller = Database["public"]["Tables"]["sellers"]["Row"];
 type TabProps = { id: string; label?: string };
@@ -76,17 +75,17 @@ export default function SellersTabs({
             onClick={() => onMapTabClick()}
             value={SELLERS_TAB_ID}
             label="Sellers"
-            icon={<Store className="mr-2 h-5 w-5" />}
+            icon={<StoreIcon className="mr-2 h-5 w-5" />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
             <Tab
               key={seller.id}
               onClick={() => onItemClick(seller)}
-              onClose={onTabClose}
+              onClose={() => onTabClose(seller.id)}
               value={seller.id.toString()}
               label={seller.label || "Unknown"}
-              icon={<Store className="mr-2 h-5 w-5" />}
+              icon={<StoreIcon className="mr-2 h-5 w-5" />}
               selectedTab={tabId}
             />
           ))}

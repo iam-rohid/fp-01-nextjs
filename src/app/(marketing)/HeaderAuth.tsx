@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import HeaderUserButton from "./HeaderUserButton";
 import { type User } from "@supabase/supabase-js";
 import supabaseClient from "@/libs/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
@@ -12,13 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  CreditCard,
-  Home,
-  LogOut,
-  Settings,
-  User as UserIcon,
-} from "lucide-react";
+import { CreditCardIcon, HomeIcon, LogOutIcon, UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -91,7 +84,7 @@ export default function HeaderAuth({ user }: { user: User }) {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/home">
-              <Home className="mr-2 h-4 w-4" />
+              <HomeIcon className="mr-2 h-4 w-4" />
               <span>Home</span>
             </Link>
           </DropdownMenuItem>
@@ -103,7 +96,7 @@ export default function HeaderAuth({ user }: { user: User }) {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/billing">
-              <CreditCard className="mr-2 h-4 w-4" />
+              <CreditCardIcon className="mr-2 h-4 w-4" />
               <span>Billing</span>
             </Link>
           </DropdownMenuItem>
@@ -111,8 +104,8 @@ export default function HeaderAuth({ user }: { user: User }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={handleSignOut}>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
+            <LogOutIcon className="mr-2 h-4 w-4" />
+            <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

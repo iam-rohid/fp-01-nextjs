@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { ExternalLink } from "lucide-react";
+import { ExternalLinkIcon } from "lucide-react";
 
 const fetchSeller = async (sellerId: string) => {
   const { data, error } = await supabaseClient
@@ -70,7 +70,7 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
                 target="_blank"
               >
                 Visit the <strong>{seller.name}</strong> storefront
-                <ExternalLink className="ml-2 inline h-4 w-4" />
+                <ExternalLinkIcon className="ml-2 inline h-4 w-4" />
               </Link>
             </CardDescription>
           </CardHeader>

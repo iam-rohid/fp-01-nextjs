@@ -1,7 +1,7 @@
-import { Loader2 } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 
 const CircularProgress = () => {
-  return <Loader2 className="h-6 w-6 animate-spin" />;
+  return <Loader2Icon className="h-6 w-6 animate-spin" />;
 };
 
 export default CircularProgress;

@@ -3,7 +3,7 @@
 import { APP_NAME } from "@/utils/constant";
 import Link from "next/link";
 import HeaderAuth from "./HeaderAuth";
-import { Menu } from "lucide-react";
+import { PanelLeftIcon } from "lucide-react";
 import { useAuth } from "../AuthProvider";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
@@ -51,7 +51,7 @@ export default function Header() {
           )}
 
           <Button className="px-2 lg:hidden" variant="ghost">
-            <Menu className="h-6 w-6" />
+            <PanelLeftIcon className="h-6 w-6" />
           </Button>
         </div>
       </div>

@@ -7,7 +7,7 @@ import supabaseClient from "@/libs/supabaseClient";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, CheckCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertCircleIcon, CheckCircleIcon, Loader2Icon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const schema = yup
@@ -48,7 +48,7 @@ export default function ForgotPasswordForm() {
   if (isSubmitSuccessful) {
     return (
       <Alert variant="default">
-        <CheckCircle className="h-4 w-4" />
+        <CheckCircleIcon className="h-4 w-4" />
         <AlertTitle>Check your email to confirm</AlertTitle>
         <AlertDescription>
           An email has been sent with instructions to reset your password
@@ -76,14 +76,14 @@ export default function ForgotPasswordForm() {
 
       {!!errors.root?.message && (
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircleIcon className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{errors.root.message}</AlertDescription>
         </Alert>
       )}
 
       <Button disabled={isSubmitting} type="submit" className="w-full">
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isSubmitting && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
         Send email
       </Button>
     </form>

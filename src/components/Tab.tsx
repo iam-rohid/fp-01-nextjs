@@ -5,9 +5,9 @@ import { MdClose } from "react-icons/md";
 export type TabProps = {
   value: string;
   label?: string;
-  onClick?: (value: string) => void;
+  onClick?: () => void;
   icon: ReactNode;
-  onClose?: (value: string) => void;
+  onClose?: () => void;
   selectedTab?: string;
 };
 
@@ -22,7 +22,13 @@ const Tab = ({
   return (
     <div className="relative h-full">
       <button
-        onClick={() => onClick && onClick(value)}
+        onClick={() => onClick && onClick()}
+        onMouseUp={(e) => {
+          // Closing tab on mouse middle/scroll wheel click
+          if (e.button === 1) {
+            onClose && onClose();
+          }
+        }}
         className={clsx(
           "flex h-full items-center px-4 transition-colors",
           selectedTab === value
@@ -40,7 +46,7 @@ const Tab = ({
       </button>
       {onClose && (
         <button
-          onClick={() => onClose(value)}
+          onClick={() => onClose()}
           className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xl text-foreground/60 transition-colors hover:bg-muted hover:text-foreground/90"
         >
           <MdClose />

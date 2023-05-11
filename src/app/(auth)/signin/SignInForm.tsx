@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import supabaseClient from "@/libs/supabaseClient";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircleIcon, Loader2Icon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -103,14 +103,14 @@ export default function SignInForm({ email }: { email?: string }) {
 
       {!!errors.root?.message && (
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircleIcon className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{errors.root.message}</AlertDescription>
         </Alert>
       )}
 
       <Button disabled={isSubmitting} type="submit" className="w-full">
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isSubmitting && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
         Sign In
       </Button>
     </form>

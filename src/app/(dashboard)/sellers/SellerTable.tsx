@@ -8,19 +8,6 @@ import {
 } from "@tanstack/react-table";
 import clsx from "clsx";
 import { useCallback, useMemo, useState } from "react";
-import {
-  MdAdd,
-  MdClose,
-  MdContentCopy,
-  MdExpandMore,
-  MdGridView,
-  MdMoreVert,
-  MdOpenInNew,
-  MdStore,
-} from "react-icons/md";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import * as ContextMenu from "@radix-ui/react-context-menu";
-import * as Popover from "@radix-ui/react-popover";
 import Link from "next/link";
 import { Seller } from "@/types/sellers";
 import copyToClipboard from "@/utils/copyToClipboard";
@@ -30,7 +17,52 @@ import supabaseClient from "@/libs/supabaseClient";
 import CircularProgress from "@/components/CircularProgress";
 import { FilterOperator } from "@/types/FilterOperator";
 import { Button } from "@/components/ui/button";
-import { Columns, Filter, ListOrdered, RefreshCcw } from "lucide-react";
+import {
+  ArrowDownUpIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronsUpDownIcon,
+  ColumnsIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  LayoutGridIcon,
+  ListFilterIcon,
+  MoreVerticalIcon,
+  PlusIcon,
+  RefreshCcwIcon,
+  StoreIcon,
+  XIcon,
+} from "lucide-react";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 
 declare module "@tanstack/table-core" {
   interface FilterFns {
@@ -163,7 +195,7 @@ export default function SellerTable({
             disabled={isRefetching || isLoading}
             onClick={() => refetch()}
           >
-            <RefreshCcw
+            <RefreshCcwIcon
               className={clsx(
                 "mr-2 h-4 w-4",
                 isRefetching ? "animate-spin" : ""
@@ -332,48 +364,37 @@ const TableComponent = ({
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="flex w-fit [&_td]:hover:bg-slate-100">
               <td className="sticky left-0 z-10 flex w-10 items-center justify-center border-b border-r bg-white">
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
-                    <button
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
                       title="Menu"
-                      className="flex h-8 w-8 items-center justify-center rounded-md text-xl text-slate-400 hover:text-slate-900"
+                      className="h-8 w-8 p-0"
                     >
-                      <MdMoreVert />
-                    </button>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Portal>
-                    <DropdownMenu.Content
-                      align="start"
-                      side="bottom"
-                      className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
-                    >
-                      <DropdownMenu.Item asChild>
-                        <button
-                          onClick={() => onItemClick(row.original)}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                        >
-                          <MdGridView className="text-xl" />
-                          View Details
-                        </button>
-                      </DropdownMenu.Item>
-                      <DropdownMenu.Item asChild>
-                        <Link
-                          target="_blank"
-                          href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                        >
-                          <MdStore className="text-xl" />
-                          View Storefront
-                          <MdOpenInNew className="ml-2 text-xl" />
-                        </Link>
-                      </DropdownMenu.Item>
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Portal>
-                </DropdownMenu.Root>
+                      <MoreVerticalIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" side="bottom">
+                    <DropdownMenuItem onClick={() => onItemClick(row.original)}>
+                      <LayoutGridIcon className="mr-2 h-4 w-4" />
+                      View Details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        target="_blank"
+                        href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
+                      >
+                        <StoreIcon className="mr-2 h-4 w-4" />
+                        View Storefront
+                        <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </td>
               {row.getVisibleCells().map((cell) => (
-                <ContextMenu.Root key={cell.id}>
-                  <ContextMenu.Trigger asChild>
+                <ContextMenu key={cell.id}>
+                  <ContextMenuTrigger asChild>
                     <td
                       className={clsx(
                         "flex items-center border-b bg-white p-2",
@@ -390,44 +411,33 @@ const TableComponent = ({
                         )}
                       </p>
                     </td>
-                  </ContextMenu.Trigger>
-                  <ContextMenu.Portal>
-                    <ContextMenu.Content className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200">
-                      <ContextMenu.Item asChild>
-                        <button
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                          onClick={() =>
-                            copyToClipboard(cell.getValue()?.toString() || "")
-                          }
-                        >
-                          <MdContentCopy className="text-xl" />
-                          Copy
-                        </button>
-                      </ContextMenu.Item>
-                      <ContextMenu.Separator className="my-2 h-px bg-slate-200" />
-                      <ContextMenu.Item asChild>
-                        <button
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                          onClick={() => onItemClick(row.original)}
-                        >
-                          <MdGridView className="text-xl" />
-                          View details
-                        </button>
-                      </ContextMenu.Item>
-                      <ContextMenu.Item asChild>
-                        <Link
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                          target="_blank"
-                          href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
-                        >
-                          <MdStore className="text-xl" />
-                          <p className="flex-1">Storefront</p>
-                          <MdOpenInNew className="text-xl" />
-                        </Link>
-                      </ContextMenu.Item>
-                    </ContextMenu.Content>
-                  </ContextMenu.Portal>
-                </ContextMenu.Root>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem
+                      onClick={() =>
+                        copyToClipboard(cell.getValue()?.toString() || "")
+                      }
+                    >
+                      <CopyIcon className="mr-2 h-4 w-4" />
+                      Copy
+                    </ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem onClick={() => onItemClick(row.original)}>
+                      <LayoutGridIcon className="mr-2 h-4 w-4" />
+                      View details
+                    </ContextMenuItem>
+                    <ContextMenuItem asChild>
+                      <Link
+                        target="_blank"
+                        href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
+                      >
+                        <StoreIcon className="mr-2 h-4 w-4" />
+                        Storefront
+                        <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                      </Link>
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
               ))}
             </tr>
           ))}
@@ -484,162 +494,177 @@ const FilterButton = ({
     setFilters((filters) => [...filters, filter]);
   }, []);
 
-  const removeFilter = useCallback((id: string) => {
-    setFilters((filters) => filters.filter((item) => item.id !== id));
-  }, []);
-
   const onApply = useCallback(() => {
     onChange(filters);
   }, [filters, onChange]);
 
   return (
-    <Popover.Root onOpenChange={() => setFilters(value)}>
-      <Popover.Trigger asChild>
+    <Popover onOpenChange={() => setFilters(value)}>
+      <PopoverTrigger asChild>
         <Button variant="outline">
-          <Filter className="mr-2 h-4 w-4" />
+          <ListFilterIcon className="mr-2 h-4 w-4" />
           {value.length
             ? `Filtered by ${value.length} rule${value.length > 1 ? "s" : ""}`
             : "Filter"}
         </Button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          align="start"
-          className="z-50 w-screen max-w-[512px] rounded-lg bg-white shadow-xl ring-1 ring-slate-200"
-        >
-          {filters.length ? (
-            <div className="space-y-2 p-2">
-              {filters.map((filter) => (
-                <div key={filter.id} className="flex items-center gap-2">
-                  <DropdownMenu.Root>
-                    <DropdownMenu.Trigger className="flex h-10 flex-1 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
-                      <p className="flex-1">
-                        {COLUMN_NAME_TO_LABEL[filter.columnName]}
-                      </p>
-                      <MdExpandMore className="-mr-1 text-xl" />
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Portal>
-                      <DropdownMenu.Content
-                        align="start"
-                        className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
-                      >
-                        {COLUMN_NAMES.map((value) => (
-                          <DropdownMenu.Item key={value} asChild>
-                            <button
-                              onClick={() => {
-                                setFilters((filters) =>
-                                  filters.map((item) =>
-                                    item.id === filter.id
-                                      ? { ...item, columnName: value }
-                                      : item
-                                  )
-                                );
-                              }}
-                              className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                            >
-                              {COLUMN_NAME_TO_LABEL[value]}
-                            </button>
-                          </DropdownMenu.Item>
-                        ))}
-                      </DropdownMenu.Content>
-                    </DropdownMenu.Portal>
-                  </DropdownMenu.Root>
-
-                  <DropdownMenu.Root>
-                    <DropdownMenu.Trigger className="flex h-10 cursor-pointer appearance-none items-center gap-2 truncate rounded-lg border pl-4 pr-4 text-start text-slate-600 hover:border-slate-300 hover:text-slate-900">
-                      <p className="flex-1">
-                        {FILTER_OPERATOR_TO_LABEL[filter.operator][0]}
-                      </p>
-                      <MdExpandMore className="-mr-1 text-xl" />
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Portal>
-                      <DropdownMenu.Content
-                        align="start"
-                        className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
-                      >
-                        {OPERATORS.map((value) => (
-                          <DropdownMenu.Item key={value} asChild>
-                            <button
-                              onClick={() => {
-                                setFilters((filters) =>
-                                  filters.map((item) =>
-                                    item.id === filter.id
-                                      ? { ...item, operator: value }
-                                      : item
-                                  )
-                                );
-                              }}
-                              className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                            >
-                              <span className="text-slate-400">
-                                [{FILTER_OPERATOR_TO_LABEL[value][0]}]
-                              </span>
-                              <span>{FILTER_OPERATOR_TO_LABEL[value][1]}</span>
-                            </button>
-                          </DropdownMenu.Item>
-                        ))}
-                      </DropdownMenu.Content>
-                    </DropdownMenu.Portal>
-                  </DropdownMenu.Root>
-
-                  <input
-                    type="text"
-                    value={filter.query}
-                    onChange={(e) => {
-                      const value = e.currentTarget.value;
-                      setFilters((filters) =>
-                        filters.map((item) =>
-                          item.id === filter.id
-                            ? { ...item, query: value }
-                            : item
-                        )
-                      );
-                    }}
-                    placeholder="Enter a value"
-                    className="h-10 w-40 min-w-0 max-w-none rounded-lg border px-4"
-                  />
-                  <button
-                    className="flex h-10 w-10 items-center justify-center gap-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    onClick={() => removeFilter(filter.id)}
-                  >
-                    <MdClose className="text-xl" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-2">
-              <div className="p-2">
-                <p className="text-lg font-medium text-slate-600">
-                  No filters applied to this table
-                </p>
-                <p className="text-slate-400">
-                  Add a column below to filter the table
-                </p>
-              </div>
-            </div>
-          )}
-          <footer className="flex items-center justify-between gap-4 border-t p-2">
-            <button
-              className="flex h-10 items-center gap-2 rounded-lg px-4 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              onClick={addNewFilter}
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-[450px] p-0">
+        {filters.length ? (
+          <div className="space-y-2 p-2">
+            {filters.map((filter) => (
+              <FilterRow
+                key={filter.id}
+                filter={filter}
+                onChnage={(value) =>
+                  setFilters(
+                    filters.map((item) =>
+                      item.id === filter.id ? value : item
+                    )
+                  )
+                }
+                onRemove={() =>
+                  setFilters(filters.filter((item) => item.id !== filter.id))
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-1 p-4">
+            <p className="font-medium text-accent-foreground">
+              No filters applied to this table
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Add a column below to filter the table
+            </p>
+          </div>
+        )}
+        <footer className="flex items-center justify-between gap-4 border-t p-2">
+          <Button onClick={addNewFilter} variant="ghost">
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Add Filter
+          </Button>
+          <PopoverClose asChild>
+            <Button
+              disabled={filters === value}
+              onClick={onApply}
+              variant="outline"
             >
-              <MdAdd className="-ml-1 text-xl" />
-              Add Filter
-            </button>
-            <Popover.Close asChild>
-              <button
-                disabled={filters === value}
-                onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
-              >
-                Apply Filter
-              </button>
-            </Popover.Close>
-          </footer>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+              Apply Filter
+            </Button>
+          </PopoverClose>
+        </footer>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+const FilterRow = ({
+  filter,
+  onChnage,
+  onRemove,
+}: {
+  filter: Filter;
+  onChnage: (filter: Filter) => void;
+  onRemove: () => void;
+}) => {
+  const [columnNamePopoverOpen, setColumnNamePopoverOpen] = useState(false);
+  const [operatorPopoverOpen, setOperatorPopoverOpen] = useState(false);
+  return (
+    <div className="flex items-center gap-2">
+      <Popover
+        open={columnNamePopoverOpen}
+        onOpenChange={setColumnNamePopoverOpen}
+      >
+        <PopoverTrigger asChild>
+          <Button variant="outline" role="combobox" className="w-32">
+            <span className="flex-1 truncate text-left">
+              {COLUMN_NAME_TO_LABEL[filter.columnName]}
+            </span>
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Search framework..." />
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {COLUMN_NAMES.map((name) => (
+                <CommandItem
+                  key={name}
+                  onSelect={() => {
+                    onChnage({ ...filter, columnName: name });
+                    setColumnNamePopoverOpen(false);
+                  }}
+                >
+                  <CheckIcon
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      filter.columnName === name ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {COLUMN_NAME_TO_LABEL[name]}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+
+      <Popover open={operatorPopoverOpen} onOpenChange={setOperatorPopoverOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" role="combobox" className="w-20">
+            <span className="flex-1 truncate text-left">
+              {FILTER_OPERATOR_TO_LABEL[filter.operator][0]}
+            </span>
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0">
+          <Command>
+            <CommandInput placeholder="Search framework..." />
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {OPERATORS.map((operator) => (
+                <CommandItem
+                  key={operator}
+                  onSelect={() => {
+                    onChnage({ ...filter, operator: operator });
+                    setOperatorPopoverOpen(false);
+                  }}
+                  value={`[${FILTER_OPERATOR_TO_LABEL[operator][0]}] ${FILTER_OPERATOR_TO_LABEL[operator][1]}`}
+                >
+                  <CheckIcon
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      filter.operator === operator ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  <span className="mr-2 text-muted-foreground">
+                    [{FILTER_OPERATOR_TO_LABEL[operator][0]}]
+                  </span>
+                  <span>{FILTER_OPERATOR_TO_LABEL[operator][1]}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+
+      <Input
+        type="text"
+        value={filter.query}
+        onChange={(e) => {
+          const value = e.currentTarget.value;
+          onChnage({ ...filter, query: value });
+        }}
+        placeholder="Enter a value"
+        className="flex-1"
+      />
+
+      <Button className="h-10 w-10 p-0" variant="ghost" onClick={onRemove}>
+        <XIcon className="h-5 w-5" />
+      </Button>
+    </div>
   );
 };
 
@@ -651,6 +676,7 @@ const SortButton = ({
   onChange: (value: Sort[]) => void;
 }) => {
   const [sorts, setSorts] = useState<Sort[]>(value);
+  const [columnNamePopoverOpen, setColumnNamePopoverOpen] = useState(false);
   const availableColumns = useMemo(
     () =>
       COLUMN_NAMES.filter(
@@ -668,133 +694,137 @@ const SortButton = ({
     setSorts((items) => [...items, sort]);
   }, []);
 
-  const removeSort = useCallback((id: string) => {
-    setSorts((items) => items.filter((item) => item.id !== id));
-  }, []);
-
   const onApply = useCallback(() => {
     onChange(sorts);
   }, [sorts, onChange]);
 
   return (
-    <Popover.Root onOpenChange={() => setSorts(value)}>
-      <Popover.Trigger asChild>
+    <Popover onOpenChange={() => setSorts(value)}>
+      <PopoverTrigger asChild>
         <Button variant="outline">
-          <ListOrdered className="mr-2 h-4 w-4" />
+          <ArrowDownUpIcon className="mr-2 h-4 w-4" />
           {value.length
             ? `Sorted by ${value.length} rule${value.length > 1 ? "s" : ""}`
             : "Sort"}
         </Button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          align="start"
-          className="z-50 w-screen max-w-[512px] rounded-lg bg-white shadow-xl ring-1 ring-slate-200"
-        >
-          {sorts.length ? (
-            <div className="space-y-2 p-2">
-              {sorts.map((order) => (
-                <div key={order.id} className="flex items-center gap-2">
-                  <p className="flex-1 px-2">
-                    <span className="text-slate-600">Sort by: </span>
-                    <span className="font-medium text-slate-900">
-                      {COLUMN_NAME_TO_LABEL[order.columnName]}
-                    </span>
-                  </p>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-[400px] p-0">
+        {sorts.length ? (
+          <div className="space-y-2 p-2">
+            {sorts.map((order) => (
+              <SortRow
+                key={order.id}
+                sort={order}
+                onChange={(value) =>
+                  setSorts(
+                    sorts.map((item) => (item.id === order.id ? value : item))
+                  )
+                }
+                onRemove={() =>
+                  setSorts(sorts.filter((item) => item.id !== order.id))
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-1 p-4">
+            <p className="font-medium text-accent-foreground">
+              No sorts applied to this table
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Add a column below to sort the table
+            </p>
+          </div>
+        )}
 
-                  <div className="flex items-center gap-2">
-                    <p className="text-slate-600">Ascending: </p>
-                    <button
-                      onClick={() => {
-                        setSorts((orders) =>
-                          orders.map((item) =>
-                            item.id === order.id
-                              ? { ...item, ascending: !order.ascending }
-                              : item
-                          )
-                        );
-                      }}
-                      className={clsx(
-                        "relative h-7 w-12 rounded-full transition-colors",
-                        order.ascending ? "bg-primary-500" : "bg-slate-200"
-                      )}
-                    >
-                      <div
-                        className={clsx(
-                          "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full transition-[left,color]",
-                          order.ascending
-                            ? "left-6 bg-white"
-                            : "left-1 bg-slate-400"
-                        )}
-                      />
-                    </button>
-                  </div>
-                  <button
-                    className="flex h-10 w-10 items-center justify-center gap-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    onClick={() => removeSort(order.id)}
-                  >
-                    <MdClose className="text-xl" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-2">
-              <div className="p-2">
-                <p className="text-lg font-medium text-slate-600">
-                  No sorts applied to this table
-                </p>
-                <p className="text-slate-400">
-                  Add a column below to sort the table
-                </p>
-              </div>
-            </div>
-          )}
-          <footer className="flex items-center justify-between gap-4 border-t p-2">
-            {availableColumns.length ? (
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger asChild>
-                  <button className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50">
-                    Pick a column to sort by
-                    <MdExpandMore className="-mr-1 text-xl" />
-                  </button>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Portal>
-                  <DropdownMenu.Content
-                    align="start"
-                    side="bottom"
-                    className="z-50 min-w-[200px] rounded-lg bg-white py-2 shadow-xl ring-1 ring-slate-200"
-                  >
-                    {availableColumns.map((column) => (
-                      <DropdownMenu.Item asChild key={column}>
-                        <button
-                          onClick={() => addNewSort(column)}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-slate-600 outline-none focus:bg-slate-100 focus:text-slate-900"
-                        >
-                          {COLUMN_NAME_TO_LABEL[column]}
-                        </button>
-                      </DropdownMenu.Item>
+        <footer className="flex items-center justify-between gap-4 border-t p-2">
+          {availableColumns.length ? (
+            <Popover
+              open={columnNamePopoverOpen}
+              onOpenChange={setColumnNamePopoverOpen}
+            >
+              <PopoverTrigger asChild>
+                <Button variant="outline" role="combobox" className="w-56">
+                  <span className="flex-1 truncate text-left">
+                    Pcik a column to sort by
+                  </span>
+                  <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search framework..." />
+                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandGroup>
+                    {availableColumns.map((name) => (
+                      <CommandItem
+                        key={name}
+                        onSelect={() => {
+                          addNewSort(name);
+                          setColumnNamePopoverOpen(false);
+                        }}
+                      >
+                        {COLUMN_NAME_TO_LABEL[name]}
+                      </CommandItem>
                     ))}
-                  </DropdownMenu.Content>
-                </DropdownMenu.Portal>
-              </DropdownMenu.Root>
-            ) : (
-              <p className="px-2 text-slate-600">All columns have been added</p>
-            )}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <p className="pl-2 text-sm text-muted-foreground">
+              All columns have been added
+            </p>
+          )}
 
-            <Popover.Close asChild>
-              <button
-                disabled={sorts === value}
-                onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
-              >
-                Apply Sort
-              </button>
-            </Popover.Close>
-          </footer>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+          <PopoverClose asChild>
+            <Button
+              disabled={sorts === value}
+              onClick={onApply}
+              variant="outline"
+            >
+              Apply Sort
+            </Button>
+          </PopoverClose>
+        </footer>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+const SortRow = ({
+  sort,
+  onChange,
+  onRemove,
+}: {
+  sort: Sort;
+  onChange: (value: Sort) => void;
+  onRemove: () => void;
+}) => {
+  return (
+    <div className="flex items-center gap-2">
+      <p className="flex-1 truncate pl-2 text-sm">
+        <span className="text-muted-foreground">Sort by: </span>
+        <span className="font-medium text-accent-foreground">
+          {COLUMN_NAME_TO_LABEL[sort.columnName]}
+        </span>
+      </p>
+
+      <div className="flex items-center gap-2">
+        <Label htmlFor="airplane-mode">Ascending: </Label>
+        <Switch
+          id="airplane-mode"
+          checked={sort.ascending}
+          onCheckedChange={(value) => {
+            onChange({ ...sort, ascending: value });
+          }}
+        />
+      </div>
+
+      <Button className="h-10 w-10 p-0" variant="ghost" onClick={onRemove}>
+        <XIcon className="h-5 w-5" />
+      </Button>
+    </div>
   );
 };
 
@@ -812,73 +842,58 @@ const ColumnsButton = ({
   }, [columns, onChange]);
 
   return (
-    <Popover.Root onOpenChange={() => setColumns(value)}>
-      <Popover.Trigger asChild>
+    <Popover onOpenChange={() => setColumns(value)}>
+      <PopoverTrigger asChild>
         <Button variant="outline">
-          <Columns className="mr-2 h-4 w-4" />
+          <ColumnsIcon className="mr-2 h-4 w-4" />
           Columns
         </Button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          align="start"
-          className="z-50 w-screen max-w-[320px] rounded-lg bg-white shadow-xl ring-1 ring-slate-200"
-        >
-          <div className="p-2">
-            <p className="mb-2 pl-2 text-slate-400">Hide or show columns</p>
-            <div className="space-y-2 ">
-              {COLUMN_NAMES.map((columnName) => {
-                const isActive = columns.includes(columnName);
-                return (
-                  <div key={columnName} className="flex items-center gap-2">
-                    <p className="flex-1 truncate px-2 text-slate-900">
-                      {COLUMN_NAME_TO_LABEL[columnName]}
-                    </p>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-[320px] p-0">
+        <div className="space-y-2 p-2">
+          {COLUMN_NAMES.map((columnName) => {
+            const isActive = columns.includes(columnName);
+            return (
+              <div key={columnName} className="flex items-center gap-2 p-2">
+                <p className="flex-1 truncate text-sm font-medium text-accent-foreground">
+                  {COLUMN_NAME_TO_LABEL[columnName]}
+                </p>
 
-                    <div className="flex items-center gap-2">
-                      <p className="text-slate-600">Show: </p>
-                      <button
-                        onClick={() => {
-                          setColumns((items) =>
-                            isActive
-                              ? items.filter((item) => item !== columnName)
-                              : [...items, columnName]
-                          );
-                        }}
-                        className={clsx(
-                          "relative h-7 w-12 rounded-full transition-colors",
-                          isActive ? "bg-primary-500" : "bg-slate-200"
-                        )}
-                      >
-                        <div
-                          className={clsx(
-                            "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full transition-[left,color]",
-                            isActive ? "left-6 bg-white" : "left-1 bg-slate-400"
-                          )}
-                        />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="airplane-mode">Show: </Label>
+                  <Switch
+                    id="airplane-mode"
+                    checked={isActive}
+                    onCheckedChange={() => {
+                      if (isActive) {
+                        setColumns(
+                          columns.filter((item) => item !== columnName)
+                        );
+                      } else {
+                        setColumns([...columns, columnName]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-          <footer className="flex items-center justify-between gap-4 border-t p-2">
-            <div className="flex-1"></div>
+        <footer className="flex items-center justify-between gap-4 border-t p-2">
+          <div className="flex-1"></div>
 
-            <Popover.Close asChild>
-              <button
-                disabled={columns === value}
-                onClick={onApply}
-                className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
-              >
-                Apply
-              </button>
-            </Popover.Close>
-          </footer>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+          <PopoverClose asChild>
+            <button
+              disabled={columns === value}
+              onClick={onApply}
+              className="flex h-10 items-center gap-2 rounded-lg border px-4 text-slate-600 hover:border-slate-300 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-50"
+            >
+              Apply
+            </button>
+          </PopoverClose>
+        </footer>
+      </PopoverContent>
+    </Popover>
   );
 };
