@@ -4,8 +4,8 @@ export type SubscriptionPlan = {
   subtitle?: string;
   price: number;
   type: "monthly" | "yearly";
+  entitlement: "basic" | "essentials" | "business";
   features: string[];
-  contactSales?: boolean;
   featuresTitle?: string;
   isPopular?: boolean;
 };
