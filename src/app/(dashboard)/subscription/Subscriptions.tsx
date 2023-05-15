@@ -203,14 +203,16 @@ export default function Subscriptions() {
 
   return (
     <Tabs value={isMonthly ? "monthly" : "yearly"}>
-      <TabsList className="mx-auto my-6 grid w-full max-w-xs grid-cols-2">
-        <TabsTrigger onClick={() => setIsMonthly(true)} value="monthly">
-          Monthly
-        </TabsTrigger>
-        <TabsTrigger onClick={() => setIsMonthly(false)} value="yearly">
-          Yearly
-        </TabsTrigger>
-      </TabsList>
+      <div className="p-6">
+        <TabsList className="mx-auto grid w-full max-w-xs grid-cols-2">
+          <TabsTrigger onClick={() => setIsMonthly(true)} value="monthly">
+            Monthly
+          </TabsTrigger>
+          <TabsTrigger onClick={() => setIsMonthly(false)} value="yearly">
+            Yearly
+          </TabsTrigger>
+        </TabsList>
+      </div>
       <div className="overflow-x-auto">
         <div className="grid grid-cols-[repeat(5,minmax(200px,1fr));] p-6">
           <HeaderRow />
