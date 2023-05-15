@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren } from "react";
+import { Fragment, PropsWithChildren } from "react";
 import Header from "./Header";
 import { redirect } from "next/navigation";
 import serverSupabase from "@/libs/serverSupabase";

@@ -1,10 +1,9 @@
 export type SubscriptionPlan = {
+  id: string;
   name: string;
   subtitle?: string;
-  price: {
-    monthly: number;
-    yearly: number;
-  };
+  price: number;
+  type: "monthly" | "yearly";
   features: string[];
   contactSales?: boolean;
   featuresTitle?: string;

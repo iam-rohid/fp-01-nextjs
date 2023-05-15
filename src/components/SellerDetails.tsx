@@ -59,7 +59,7 @@ export default function SellerDetails({ sellerId }: { sellerId: string }) {
 
   return (
     <main className="h-full w-full overflow-y-auto">
-      <div className="container space-y-8 py-8">
+      <div className="container space-y-6 py-6">
         <Card>
           <CardHeader>
             <CardTitle>{seller.name}</CardTitle>

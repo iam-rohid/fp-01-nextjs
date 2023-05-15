@@ -1,7 +1,6 @@
 import { SubscriptionPlan } from "@/types/subscription-plan";
 import clsx from "clsx";
 import Link from "next/link";
-import React from "react";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -11,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { CheckIcon, Stars } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 
 export default function PlanCard({
   plan,
@@ -48,9 +47,9 @@ export default function PlanCard({
               <p>
                 <span className="text-2xl font-semibold text-card-foreground">
                   $
-                  {isYearly
-                    ? Math.round(plan.price.yearly / 12)
-                    : plan?.price.monthly}
+                  {plan.type === "yearly"
+                    ? Math.round(plan.price / 12)
+                    : plan?.price}
                 </span>
                 <span className="text-card-foreground/40">/mo</span>
               </p>

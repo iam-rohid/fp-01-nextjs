@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { type User } from "@supabase/supabase-js";
 import supabaseClient from "@/libs/supabaseClient";
 import { useQuery } from "@tanstack/react-query";

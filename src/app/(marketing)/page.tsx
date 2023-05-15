@@ -4,7 +4,6 @@ import { APP_NAME } from "@/utils/constant";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
 
 export const metadata: Metadata = {
   title: APP_NAME,

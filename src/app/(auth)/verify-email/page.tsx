@@ -1,5 +1,4 @@
 import { APP_NAME } from "@/utils/constant";
-import React from "react";
 import VerifyEmailForm from "./VerifyEmailForm";
 
 export default function VerifyEmail({

@@ -4,7 +4,7 @@ import { type Seller } from "@/components/SellerMap";
 import Tab from "@/components/Tab";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import TabPanel from "@/components/TabPanel";
 import SellerDetails from "@/components/SellerDetails";
 import { MapIcon, StoreIcon } from "lucide-react";

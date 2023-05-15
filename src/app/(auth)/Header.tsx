@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/utils/constant";
 import Link from "next/link";
-import React from "react";
 
 export default function Header() {
   return (

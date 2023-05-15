@@ -6,6 +6,7 @@ import queryClient from "@/libs/queryClient";
 import AuthProvider from "./AuthProvider";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
@@ -13,7 +14,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body suppressHydrationWarning={true} className="min-h-screen">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
             <Toaster />
           </AuthProvider>
         </QueryClientProvider>
