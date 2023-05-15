@@ -377,8 +377,11 @@ const TableComponent = ({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" side="bottom">
-                    <DropdownMenuItem onClick={() => onItemClick(row.original)}>
-                      <LayoutGridIcon className="mr-2 h-4 w-4" />
+                    <DropdownMenuItem
+                      onClick={() => onItemClick(row.original)}
+                      className="cursor-pointer"
+                    >
+                      <LayoutGridIcon className="mr-3 h-4 w-4" />
                       View Details
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -386,7 +389,7 @@ const TableComponent = ({
                         target="_blank"
                         href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
                       >
-                        <StoreIcon className="mr-2 h-4 w-4" />
+                        <StoreIcon className="mr-3 h-4 w-4" />
                         View Storefront
                         <ExternalLinkIcon className="ml-2 h-4 w-4" />
                       </Link>
@@ -409,13 +412,17 @@ const TableComponent = ({
                       onClick={() =>
                         copyToClipboard(cell.getValue()?.toString() || "")
                       }
+                      className="cursor-pointer"
                     >
-                      <CopyIcon className="mr-2 h-4 w-4" />
+                      <CopyIcon className="mr-3 h-4 w-4" />
                       Copy
                     </ContextMenuItem>
                     <ContextMenuSeparator />
-                    <ContextMenuItem onClick={() => onItemClick(row.original)}>
-                      <LayoutGridIcon className="mr-2 h-4 w-4" />
+                    <ContextMenuItem
+                      onClick={() => onItemClick(row.original)}
+                      className="cursor-pointer"
+                    >
+                      <LayoutGridIcon className="mr-3 h-4 w-4" />
                       View details
                     </ContextMenuItem>
                     <ContextMenuItem asChild>
@@ -423,7 +430,7 @@ const TableComponent = ({
                         target="_blank"
                         href={`https://amazon.com/sp?seller=A10111992WJRYRFBZH9IS`}
                       >
-                        <StoreIcon className="mr-2 h-4 w-4" />
+                        <StoreIcon className="mr-3 h-4 w-4" />
                         Storefront
                         <ExternalLinkIcon className="ml-2 h-4 w-4" />
                       </Link>
@@ -494,7 +501,7 @@ const FilterButton = ({
     <Popover onOpenChange={() => setFilters(value)}>
       <PopoverTrigger asChild>
         <Button variant="outline">
-          <ListFilterIcon className="mr-2 h-4 w-4" />
+          <ListFilterIcon className="mr-3 h-4 w-4" />
           {value.length
             ? `Filtered by ${value.length} rule${value.length > 1 ? "s" : ""}`
             : "Filter"}
@@ -532,7 +539,7 @@ const FilterButton = ({
         )}
         <footer className="flex items-center justify-between gap-4 border-t p-2">
           <Button onClick={addNewFilter} variant="ghost">
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon className="mr-3 h-4 w-4" />
             Add Filter
           </Button>
           <PopoverClose asChild>
@@ -694,7 +701,7 @@ const SortButton = ({
     <Popover onOpenChange={() => setSorts(value)}>
       <PopoverTrigger asChild>
         <Button variant="outline">
-          <ArrowDownUpIcon className="mr-2 h-4 w-4" />
+          <ArrowDownUpIcon className="mr-3 h-4 w-4" />
           {value.length
             ? `Sorted by ${value.length} rule${value.length > 1 ? "s" : ""}`
             : "Sort"}
@@ -831,7 +838,7 @@ const ColumnsButton = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <SlidersHorizontalIcon className="mr-2 h-4 w-4" />
+          <SlidersHorizontalIcon className="mr-3 h-4 w-4" />
           Views
         </Button>
       </DropdownMenuTrigger>

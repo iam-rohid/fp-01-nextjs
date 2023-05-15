@@ -63,7 +63,7 @@ export default function PlanCard({ plan }: { plan: SubscriptionPlan }) {
           <ul className="space-y-4">
             {plan.features.map((feature, i) => (
               <li key={i} className="flex text-card-foreground/60">
-                <CheckIcon className="mr-2 mt-1 h-5 w-5" />
+                <CheckIcon className="mr-3 mt-1 h-5 w-5" />
                 <span className="flex-1 leading-6">{feature}</span>
               </li>
             ))}

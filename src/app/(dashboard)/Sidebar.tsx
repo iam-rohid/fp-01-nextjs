@@ -81,7 +81,7 @@ export default function Sidebar({ user }: { user: User }) {
           <nav className="space-y-px">
             <SidebarListItem asChild isActive={pathname === "/home"}>
               <Link href="/home">
-                <HomeIcon className="mr-2 h-4 w-4" /> Home
+                <HomeIcon className="mr-3 h-4 w-4" /> Home
               </Link>
             </SidebarListItem>
           </nav>
@@ -91,7 +91,7 @@ export default function Sidebar({ user }: { user: User }) {
           <nav className="space-y-px">
             <SidebarListItem asChild isActive={pathname.startsWith("/sellers")}>
               <Link href="/sellers">
-                <StoreIcon className="mr-2 h-4 w-4" /> Sellers
+                <StoreIcon className="mr-3 h-4 w-4" /> Sellers
               </Link>
             </SidebarListItem>
             <SidebarListItem
@@ -99,7 +99,7 @@ export default function Sidebar({ user }: { user: User }) {
               isActive={pathname.startsWith("/seller-map")}
             >
               <Link href="/seller-map">
-                <MapIcon className="mr-2 h-4 w-4" /> Seller Map
+                <MapIcon className="mr-3 h-4 w-4" /> Seller Map
               </Link>
             </SidebarListItem>
           </nav>
@@ -109,7 +109,7 @@ export default function Sidebar({ user }: { user: User }) {
           <nav className="space-y-px">
             <SidebarListItem asChild>
               <Link href="/help">
-                <BookIcon className="mr-2 h-4 w-4" /> Help & Support
+                <BookIcon className="mr-3 h-4 w-4" /> Help & Support
               </Link>
             </SidebarListItem>
           </nav>
@@ -171,19 +171,19 @@ const UserButton = ({
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/account">
-              <UserIcon className="mr-2 h-4 w-4" />
+              <UserIcon className="mr-3 h-4 w-4" />
               <span>Account</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/billing">
-              <CreditCardIcon className="mr-2 h-4 w-4" />
+              <CreditCardIcon className="mr-3 h-4 w-4" />
               <span>Billing</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/subscription">
-              <StarIcon className="mr-2 h-4 w-4" />
+              <StarIcon className="mr-3 h-4 w-4" />
               <span>Subscription</span>
             </Link>
           </DropdownMenuItem>
@@ -192,15 +192,15 @@ const UserButton = ({
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/help">
-              <BookIcon className="mr-2 h-4 w-4" />
+              <BookIcon className="mr-3 h-4 w-4" />
               <span>Help & Support</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={handleSignOut}>
-            <LogOutIcon className="mr-2 h-4 w-4" />
+          <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+            <LogOutIcon className="mr-3 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>

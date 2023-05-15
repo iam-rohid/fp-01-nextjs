@@ -78,7 +78,7 @@ export default function SellerMapTabs({
             onClick={() => onMapTabClick()}
             value="map"
             label="Seller Map"
-            icon={<MapIcon className="mr-2 h-5 w-5" />}
+            icon={<MapIcon className="mr-3 h-4 w-4" />}
             selectedTab={tabId}
           />
           {selectedSellers.map((seller) => (
@@ -88,7 +88,7 @@ export default function SellerMapTabs({
               onClose={() => onTabClose(seller.id)}
               value={seller.id.toString()}
               label={seller.label || "Unknown"}
-              icon={<StoreIcon className="mr-2 h-5 w-5" />}
+              icon={<StoreIcon className="mr-3 h-4 w-4" />}
               selectedTab={tabId}
             />
           ))}
