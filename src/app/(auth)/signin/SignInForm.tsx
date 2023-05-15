@@ -70,6 +70,7 @@ export default function SignInForm({ email }: { email?: string }) {
           autoComplete="email"
           {...register("email")}
           autoFocus
+          tabIndex={1}
         />
         {!!errors.email?.message && (
           <p className="text-sm text-destructive">{errors.email?.message}</p>
@@ -83,6 +84,7 @@ export default function SignInForm({ email }: { email?: string }) {
             <Link
               href="/forgot-password"
               className="underline underline-offset-4 hover:text-primary"
+              tabIndex={4}
             >
               Forgot password?
             </Link>
@@ -95,6 +97,7 @@ export default function SignInForm({ email }: { email?: string }) {
           autoComplete="password"
           {...register("password")}
           className="col-span-2"
+          tabIndex={2}
         />
         {!!errors.password?.message && (
           <p className="text-sm text-destructive">{errors.password?.message}</p>
@@ -109,7 +112,12 @@ export default function SignInForm({ email }: { email?: string }) {
         </Alert>
       )}
 
-      <Button disabled={isSubmitting} type="submit" className="w-full">
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        className="w-full"
+        tabIndex={3}
+      >
         {isSubmitting && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
         Sign In
       </Button>

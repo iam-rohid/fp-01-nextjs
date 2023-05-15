@@ -42,16 +42,16 @@ const plans: SubscriptionPlan[] = [
       yearly: 300,
     },
   },
-  // {
-  //   name: "Essentials",
-  //   subtitle: "Recommended for Resellers and Private Label",
-  //   features: PLUS_FEATURES,
-  //   price: {
-  //     monthly: 97,
-  //     yearly: 900,
-  //   },
-  //   featuresTitle: "Everything in Basic plus",
-  // },
+  {
+    name: "Essentials",
+    subtitle: "Recommended for Resellers and Private Label",
+    features: PLUS_FEATURES,
+    price: {
+      monthly: 97,
+      yearly: 900,
+    },
+    featuresTitle: "Everything in Basic plus",
+  },
   {
     name: "Business",
     subtitle: "Recommended for Brands",
@@ -90,7 +90,7 @@ export default function PricingPlansGroup() {
         </TabsTrigger>
       </TabsList>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {plans.map((plan, i) => (
           <PlanCard key={i} plan={plan} isYearly={!isMonthly} href="/signin" />
         ))}
